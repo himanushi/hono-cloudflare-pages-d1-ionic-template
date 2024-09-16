@@ -1,12 +1,45 @@
+import {
+  ColorModeScript,
+  type ColorModeWithSystem,
+  ThemeSchemeScript,
+  defaultConfig,
+} from "@yamada-ui/react";
 import { Hono } from "hono";
-import { renderer } from "./renderer";
+import { getCookie } from "hono/cookie";
+import ReactDOMServer from "react-dom/server";
 
 const app = new Hono();
 
-app.use(renderer);
+app.get("*", (c) => {
+  const colorMode = getCookie(c, "ui-color-mode");
+  const themeScheme = getCookie(c, "ui-theme-scheme");
 
-app.get("/", (c) => {
-  return c.render(<h1>Hello!</h1>);
+  return c.html(
+    ReactDOMServer.renderToString(
+      <html lang="ja">
+        <head>
+          <script type="module" src="/src/client.tsx" />
+        </head>
+
+        <body>
+          <ColorModeScript
+            type="cookie"
+            nonce="testing"
+            initialColorMode={
+              (colorMode as ColorModeWithSystem) ??
+              defaultConfig.initialColorMode
+            }
+          />
+          <ThemeSchemeScript
+            type="cookie"
+            nonce="testing"
+            initialThemeScheme={themeScheme ?? defaultConfig.initialThemeScheme}
+          />
+          <div id="root" />
+        </body>
+      </html>,
+    ),
+  );
 });
 
 export default app;
