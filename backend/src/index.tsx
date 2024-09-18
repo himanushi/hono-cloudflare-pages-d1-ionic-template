@@ -1,9 +1,7 @@
 import {
-  Button,
   ColorModeScript,
   type ColorModeWithSystem,
   ThemeSchemeScript,
-  UIProvider,
   defaultConfig,
 } from "@yamada-ui/react";
 import { Hono } from "hono";
@@ -20,7 +18,11 @@ app.get("*", (c) => {
     ReactDOMServer.renderToString(
       <html lang="ja">
         <head>
-          <script type="module" src="/src/client.tsx" />
+          {import.meta.env.PROD ? (
+            <script type="module" src="/static/client.js" />
+          ) : (
+            <script type="module" src="/src/client.ts" />
+          )}
         </head>
 
         <body>
@@ -37,9 +39,7 @@ app.get("*", (c) => {
             nonce="testing"
             initialThemeScheme={themeScheme ?? defaultConfig.initialThemeScheme}
           />
-          <UIProvider>
-            <Button>Click me!</Button>
-          </UIProvider>
+          <div id="root" />
         </body>
       </html>,
     ),
