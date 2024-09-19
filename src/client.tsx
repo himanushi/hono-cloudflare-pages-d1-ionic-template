@@ -15,12 +15,10 @@ if (domNode) {
     <>
       <ColorModeScript
         type="cookie"
-        nonce="testing"
         initialColorMode={defaultConfig.initialColorMode}
       />
       <ThemeSchemeScript
         type="cookie"
-        nonce="testing"
         initialThemeScheme={defaultConfig.initialThemeScheme}
       />
       <UIProvider>
