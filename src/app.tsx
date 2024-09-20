@@ -1,5 +1,7 @@
 import { Button } from "@yamada-ui/react";
+import { hc } from "hono/client";
 import { type FC, useState } from "react";
+import type { AppType } from ".";
 
 const App: FC = () => {
   return <ClockButton />;
@@ -7,22 +9,19 @@ const App: FC = () => {
 
 const ClockButton = () => {
   const [response, setResponse] = useState<string | null>(null);
+  const client = hc<AppType>(location.origin);
 
   const handleClick = async () => {
-    const response = await fetch("/api/clock");
-    const data = await response.json();
-    const headers = Array.from((response.headers as any).entries()).reduce(
-      // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-      (acc: any, [key, value]: any) => ({ ...acc, [key]: value }),
-      {},
-    );
-    const fullResponse = {
-      url: response.url,
-      status: response.status,
-      headers,
-      body: data,
-    };
-    setResponse(JSON.stringify(fullResponse, null, 2));
+    const res = await client.hello.$get({
+      query: {
+        name: "world",
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setResponse(JSON.stringify(data, null, 2));
+      console.log(data.message);
+    }
   };
 
   return (
