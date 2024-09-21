@@ -1,3 +1,4 @@
+import { Flex } from "@yamada-ui/react";
 import { type FC, useState } from "react";
 import useSWR from "swr";
 import { client } from "./client";
@@ -7,20 +8,22 @@ import { fetcher } from "./utils/fetcher";
 
 const App: FC = () => {
   return (
-    <>
+    <Flex flexDirection="column">
       <Button />
       <Button2 />
       <Button3 />
-    </>
+    </Flex>
   );
 };
 
 const Button = () => {
   const [skip, setSkip] = useState(true);
   const { data, error, isLoading } = useFetch({
+    key: "api1",
     api: client.hello.$get,
     args: { query: { name: "world" } },
     skip,
+    revalidateOnFocus: true,
   });
 
   if (data === undefined)
@@ -36,6 +39,7 @@ const Button = () => {
 
 const Button2 = () => {
   const [get, { data, error, isLoading }] = useLazyFetch({
+    key: "api2",
     api: client.hello.$get,
     args: { query: { name: "world" } },
   });
@@ -53,7 +57,7 @@ const Button2 = () => {
 
 const Button3 = () => {
   const { data, error, isLoading } = useSWR(
-    "/api2",
+    "api3",
     fetcher(client.hello.$get)({ query: { name: "world" } }),
   );
   if (error) return <div>failed to load</div>;

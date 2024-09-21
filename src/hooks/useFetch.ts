@@ -1,24 +1,21 @@
-import type { ClientRequestOptions } from "hono";
-import type { ClientResponse } from "hono/client";
-import useSWR from "swr";
+import useSWR, { type SWRConfiguration } from "swr";
+import type { ApiFunction } from "../types/ApiFunction";
 import { fetcher } from "../utils/fetcher";
 
 export const useFetch = <ARGS, RESPONSE>({
-  name = "api",
+  key = "api",
   api,
   args,
   skip = false,
+  ...options
 }: {
-  name?: string;
-  api: (
-    args: ARGS,
-    options?: ClientRequestOptions,
-  ) => Promise<ClientResponse<RESPONSE>>;
+  key?: string;
+  api: ApiFunction<ARGS, RESPONSE>;
   args: ARGS;
   skip?: boolean;
-}) => {
-  return useSWR(
-    skip ? undefined : name,
+} & SWRConfiguration) =>
+  useSWR(
+    skip ? undefined : [key, args],
     fetcher(api)(args as NonNullable<ARGS>),
+    options,
   );
-};
