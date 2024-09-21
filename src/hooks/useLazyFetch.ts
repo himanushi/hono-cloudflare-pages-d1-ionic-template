@@ -1,22 +1,26 @@
 import type { ClientRequestOptions } from "hono";
 import type { ClientResponse } from "hono/client";
+import { useCallback } from "react";
 import useSWR from "swr";
 import { fetcher } from "../utils/fetcher";
 
-export const useQuery = <ARGS, RESPONSE>({
+export const useLazyFetch = <ARGS, RESPONSE>({
+  name = "api",
   api,
   args,
-  skip = false,
 }: {
+  name?: string;
   api: (
     args: ARGS,
     options?: ClientRequestOptions,
   ) => Promise<ClientResponse<RESPONSE>>;
   args: ARGS;
-  skip?: boolean;
 }) => {
-  return useSWR(
-    skip ? undefined : "api",
-    fetcher(api)(args as NonNullable<ARGS>),
-  );
+  const swrRes = useSWR<RESPONSE>(name);
+
+  const load = useCallback(async () => {
+    swrRes.mutate(fetcher(api)(args as NonNullable<ARGS>));
+  }, [swrRes.mutate, api, args]);
+
+  return [load, swrRes];
 };
