@@ -1,37 +1,28 @@
-import { Button } from "@yamada-ui/react";
-import { hc } from "hono/client";
 import { type FC, useState } from "react";
-import type { AppType } from ".";
+import { client } from "./client";
+import { useQuery } from "./hooks/useQuery";
 
 const App: FC = () => {
   return <ClockButton />;
 };
 
 const ClockButton = () => {
-  const [response, setResponse] = useState<string | null>(null);
-  const client = hc<AppType>(location.origin);
+  const [skip, setSkip] = useState(true);
+  const { data, error, isLoading } = useQuery({
+    api: client.hello.$get,
+    args: { query: { name: "world" } },
+    skip,
+  });
 
-  const handleClick = async () => {
-    const res = await client.hello.$get({
-      query: {
-        name: "world",
-      },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setResponse(JSON.stringify(data, null, 2));
-      console.log(data.message);
-    }
-  };
-
-  return (
-    <div>
-      <Button type="button" onClick={handleClick}>
-        Get Server Time
-      </Button>
-      {response && <pre>{response}</pre>}
-    </div>
-  );
+  if (data === undefined)
+    return (
+      <button type="button" onClick={() => setSkip(false)}>
+        load
+      </button>
+    );
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+  return <h1>{data?.message}</h1>;
 };
 
 export default App;

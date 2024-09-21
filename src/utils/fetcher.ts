@@ -2,14 +2,14 @@ import type { InferRequestType } from "hono";
 import type { ClientRequestOptions, ClientResponse } from "hono/client";
 
 export const fetcher =
-  <ARG, RES>(
+  <ARGS, RESPONSE>(
     api: (
-      args: ARG,
+      args: ARGS,
       options?: ClientRequestOptions,
-    ) => Promise<ClientResponse<RES>>,
+    ) => Promise<ClientResponse<RESPONSE>>,
   ) =>
   (arg: InferRequestType<typeof api>) =>
   async () => {
     const res = await api(arg);
-    return await res.json();
+    return (await res.json()) as RESPONSE;
   };
