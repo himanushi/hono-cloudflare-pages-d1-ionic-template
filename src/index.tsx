@@ -28,6 +28,7 @@ app.get("*", (c) => {
     ReactDOMServer.renderToString(
       <html lang="en">
         <head>
+          <link href="/static/style.css" rel="stylesheet" />
           {import.meta.env.PROD ? (
             <script type="module" src="/static/frontend.js" />
           ) : (
