@@ -1,7 +1,7 @@
 import type { ClientRequestOptions } from "hono";
 import type { ClientResponse } from "hono/client";
 import { useCallback } from "react";
-import useSWR from "swr";
+import useSWR, { type SWRResponse } from "swr";
 import { fetcher } from "../utils/fetcher";
 
 export const useLazyFetch = <ARGS, RESPONSE>({
@@ -15,12 +15,13 @@ export const useLazyFetch = <ARGS, RESPONSE>({
     options?: ClientRequestOptions,
   ) => Promise<ClientResponse<RESPONSE>>;
   args: ARGS;
-}) => {
-  const swrRes = useSWR<RESPONSE>(name);
+}): [() => void, SWRResponse<RESPONSE, any>] => {
+  const { data, error, isLoading, isValidating, mutate } =
+    useSWR<RESPONSE>(name);
 
   const load = useCallback(async () => {
-    swrRes.mutate(fetcher(api)(args as NonNullable<ARGS>));
-  }, [swrRes.mutate, api, args]);
+    mutate(fetcher(api)(args as NonNullable<ARGS>));
+  }, [mutate, api, args]);
 
-  return [load, swrRes];
+  return [load, { data, error, isLoading, isValidating, mutate }];
 };
