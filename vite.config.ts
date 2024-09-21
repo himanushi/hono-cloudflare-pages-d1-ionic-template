@@ -4,13 +4,13 @@ import adapter from "@hono/vite-dev-server/cloudflare";
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
-  if (mode === "client") {
+  if (mode === "frontend") {
     return {
       build: {
         rollupOptions: {
-          input: "./src/client.tsx",
+          input: "./src/frontend.tsx",
           output: {
-            entryFileNames: "static/client.js",
+            entryFileNames: "static/frontend.js",
           },
         },
       },
