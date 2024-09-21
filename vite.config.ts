@@ -2,6 +2,7 @@ import pages from "@hono/vite-cloudflare-pages";
 import devServer from "@hono/vite-dev-server";
 import adapter from "@hono/vite-dev-server/cloudflare";
 import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig(({ mode }) => {
   if (mode === "frontend") {
@@ -14,6 +15,16 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+      plugins: [
+        viteStaticCopy({
+          targets: [
+            {
+              src: "static",
+              dest: "",
+            },
+          ],
+        }),
+      ],
     };
   }
   return {
