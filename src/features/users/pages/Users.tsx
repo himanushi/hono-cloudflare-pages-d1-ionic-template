@@ -1,22 +1,32 @@
 import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
+import { useState } from "react";
 import { useFetch } from "~/hooks/useFetch";
 import type { UsersAPI } from "~/index";
 
 export const client = hc<UsersAPI>(location.origin);
 
 export const Users = () => {
-  const { data: users } = useFetch({
+  const limit = 10;
+  const [offset, setOffset] = useState(0);
+  const { data: users, mutate } = useFetch({
+    key: "users",
     api: client.users.$get,
-    args: { query: { limit: "10", offset: "0" } },
+    args: { query: { limit: limit.toString(), offset: "0" } },
   });
 
   return (
     <Flex flexDirection="column">
-      {users?.users.map((user) => (
+      {users?.map((user) => (
         <div key={user.id}>{user.name}</div>
       ))}
-      <Button>Users</Button>
+      <Button
+        onClick={() => {
+          setOffset((prev) => prev + limit);
+        }}
+      >
+        Users
+      </Button>
     </Flex>
   );
 };

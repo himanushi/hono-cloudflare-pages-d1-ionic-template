@@ -6,8 +6,8 @@ export const usersApi = createFactory().createHandlers(
   zValidator(
     "query",
     z.object({
-      limit: z.number(),
-      offset: z.number(),
+      limit: z.string().transform((v) => Number.parseInt(v, 10)),
+      offset: z.string().transform((v) => Number.parseInt(v, 10)),
     }),
   ),
   (c) => {
@@ -18,8 +18,6 @@ export const usersApi = createFactory().createHandlers(
       name: `User ${offset + i}`,
     }));
 
-    return c.json({
-      users,
-    });
+    return c.json(users);
   },
 );
