@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
   }
   return {
     ssr: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@yamada-ui/react", "swr"],
     },
     plugins: [
       pages(),
