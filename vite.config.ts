@@ -33,7 +33,14 @@ export default defineConfig(({ mode }) => {
 
   return {
     ssr: {
-      external: ["react", "react-dom", "@yamada-ui/react", "swr"],
+      external: [
+        "react",
+        "react-dom",
+        "swr",
+        "@ionic/react",
+        "@ionic/react-router",
+        "react-router-dom",
+      ],
     },
     plugins: [
       pages(),

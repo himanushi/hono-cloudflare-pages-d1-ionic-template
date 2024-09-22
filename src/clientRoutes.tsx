@@ -1,31 +1,12 @@
-import {
-  ColorModeScript,
-  ThemeSchemeScript,
-  UIProvider,
-  defaultConfig,
-} from "@yamada-ui/react";
-import { createRoot } from "react-dom/client";
-import { Users } from "~/features/users/client/Users";
+import { IonRouterOutlet } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import { Route } from "react-router";
+import { Home } from "~/features/home/client/Home";
 
-const domNode = document.getElementById("root");
-if (domNode) {
-  const root = createRoot(domNode);
-
-  root.render(
-    <>
-      <ColorModeScript
-        type="cookie"
-        initialColorMode={defaultConfig.initialColorMode}
-      />
-      <ThemeSchemeScript
-        type="cookie"
-        initialThemeScheme={defaultConfig.initialThemeScheme}
-      />
-      <UIProvider>
-        <Users />
-      </UIProvider>
-    </>,
-  );
-} else {
-  console.error("Root element not found");
-}
+export const ClientRoutes = () => (
+  <IonReactRouter>
+    <IonRouterOutlet>
+      <Route path="/" exact component={Home} />
+    </IonRouterOutlet>
+  </IonReactRouter>
+);
