@@ -5,8 +5,12 @@ import { serverApi } from "./server";
 
 const app = new Hono();
 
-const _api = app.get("/api/users", ...usersApi).get("/api/me", ...meApi);
-export type API = typeof _api;
+const _usersApi = app.get("/api/users", ...usersApi);
+export type UsersAPI = typeof _usersApi;
+
+const _meApi = app.get("/api/me", ...meApi);
+export type MeAPI = typeof _meApi;
 
 app.get("*", ...serverApi);
+
 export { app };

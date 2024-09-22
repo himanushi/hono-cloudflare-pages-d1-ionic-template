@@ -8,9 +8,9 @@ export const serverApi = createFactory().createHandlers((c) => {
         <head>
           <link href="/static/style.css" rel="stylesheet" />
           {import.meta.env.PROD ? (
-            <script type="module" src="/static/page.js" />
+            <script type="module" src="/static/client.js" />
           ) : (
-            <script type="module" src="/src/page.tsx" />
+            <script type="module" src="/src/client.tsx" />
           )}
         </head>
         <body>
