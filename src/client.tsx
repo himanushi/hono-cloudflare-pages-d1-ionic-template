@@ -1,19 +1,32 @@
+import { Preferences } from "@capacitor/preferences";
 import {
   ColorModeScript,
   ThemeSchemeScript,
   UIProvider,
   defaultConfig,
 } from "@yamada-ui/react";
-import { StrictMode } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { SWRConfig } from "swr";
 import { preferencesProvider } from "~/utils/preferencesProvider";
 import { clientRoutes } from "./clientRoutes";
 
-createRoot(document.getElementById("root") as HTMLDivElement).render(
-  <StrictMode>
-    <SWRConfig value={{ provider: preferencesProvider }}>
+const App = () => {
+  const [value, setValue] = useState<string | null | undefined>();
+
+  useEffect(() => {
+    Preferences.get({ key: "app-cache" }).then(({ value }) => {
+      setValue(value);
+    });
+  }, []);
+
+  if (value === undefined) {
+    return <></>;
+  }
+
+  return (
+    <SWRConfig value={{ provider: preferencesProvider(value) }}>
       <ColorModeScript
         type="cookie"
         initialColorMode={defaultConfig.initialColorMode}
@@ -26,5 +39,11 @@ createRoot(document.getElementById("root") as HTMLDivElement).render(
         <RouterProvider router={clientRoutes} />
       </UIProvider>
     </SWRConfig>
+  );
+};
+
+createRoot(document.getElementById("root") as HTMLDivElement).render(
+  <StrictMode>
+    <App />
   </StrictMode>,
 );

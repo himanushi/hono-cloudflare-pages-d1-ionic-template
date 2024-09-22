@@ -1,8 +1,6 @@
 import { Preferences } from "@capacitor/preferences";
 
-const { value } = await Preferences.get({ key: "app-cache" });
-
-export function preferencesProvider() {
+export const preferencesProvider = (value: string | null) => () => {
   const map = new Map<any, any>(value ? JSON.parse(value) : []);
 
   window.addEventListener("beforeunload", () => {
@@ -14,4 +12,4 @@ export function preferencesProvider() {
   });
 
   return map;
-}
+};
