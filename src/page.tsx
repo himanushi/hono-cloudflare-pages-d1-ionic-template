@@ -5,7 +5,7 @@ import {
   defaultConfig,
 } from "@yamada-ui/react";
 import { createRoot } from "react-dom/client";
-import App from "./app";
+import { Users } from "~/features/users/pages/Users";
 
 const domNode = document.getElementById("root");
 if (domNode) {
@@ -22,7 +22,7 @@ if (domNode) {
         initialThemeScheme={defaultConfig.initialThemeScheme}
       />
       <UIProvider>
-        <App />
+        <Users />
       </UIProvider>
     </>,
   );

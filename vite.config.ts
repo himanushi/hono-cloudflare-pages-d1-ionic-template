@@ -3,15 +3,16 @@ import devServer from "@hono/vite-dev-server";
 import adapter from "@hono/vite-dev-server/cloudflare";
 import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(({ mode }) => {
   if (mode === "frontend") {
     return {
       build: {
         rollupOptions: {
-          input: "./src/frontend.tsx",
+          input: "./src/page.tsx",
           output: {
-            entryFileNames: "static/frontend.js",
+            entryFileNames: "static/page.js",
           },
         },
       },
@@ -24,6 +25,7 @@ export default defineConfig(({ mode }) => {
             },
           ],
         }),
+        tsconfigPaths(),
       ],
     };
   }
@@ -37,6 +39,7 @@ export default defineConfig(({ mode }) => {
         adapter,
         entry: "src/index.tsx",
       }),
+      tsconfigPaths(),
     ],
   };
 });

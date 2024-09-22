@@ -1,46 +1,12 @@
-import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import ReactDOMServer from "react-dom/server";
-import { z } from "zod";
+import { usersApi } from "~/features/users/workers/usersApi";
+import { workerApi } from "./worker";
 
 const app = new Hono();
 
-const route = app.get(
-  "/hello",
-  zValidator(
-    "query",
-    z.object({
-      name: z.string(),
-    }),
-  ),
-  (c) => {
-    const { name } = c.req.valid("query");
-    return c.json({
-      message: `Hello! ${name}`,
-    });
-  },
-);
+app.get("*", ...workerApi);
 
-export type AppType = typeof route;
-
-app.get("*", (c) => {
-  return c.html(
-    ReactDOMServer.renderToString(
-      <html lang="en">
-        <head>
-          <link href="/static/style.css" rel="stylesheet" />
-          {import.meta.env.PROD ? (
-            <script type="module" src="/static/frontend.js" />
-          ) : (
-            <script type="module" src="/src/frontend.tsx" />
-          )}
-        </head>
-        <body>
-          <div id="root" />
-        </body>
-      </html>,
-    ),
-  );
-});
+const _usersApi = app.get("/users", ...usersApi);
+export type UsersAPI = typeof _usersApi;
 
 export default app;
