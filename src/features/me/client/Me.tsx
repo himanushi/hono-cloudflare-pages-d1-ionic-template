@@ -1,9 +1,9 @@
 import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useFetch } from "~/hooks/useFetch";
-import type { MeAPI } from "~/workerRoutes";
+import type { API } from "~/serverRoutes";
 
-export const client = hc<MeAPI>(location.origin);
+export const client = hc<API>(location.origin);
 
 export const Me = () => {
   const { data: me } = useFetch({

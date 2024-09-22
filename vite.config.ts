@@ -6,14 +6,15 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(({ mode }) => {
-  if (mode === "frontend") {
+  if (mode === "client") {
     return {
       build: {
         rollupOptions: {
-          input: "./src/page.tsx",
+          input: "./src/client.tsx",
           output: {
-            entryFileNames: "static/page.js",
+            entryFileNames: "static/client.js",
           },
+          external: ["@hono/zod-validator"],
         },
       },
       plugins: [
@@ -29,6 +30,7 @@ export default defineConfig(({ mode }) => {
       ],
     };
   }
+
   return {
     ssr: {
       external: ["react", "react-dom", "@yamada-ui/react", "swr"],

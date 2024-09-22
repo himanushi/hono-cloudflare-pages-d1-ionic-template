@@ -1,3 +1,3 @@
-import { app } from "./workerRoutes";
+import { app } from "./serverRoutes";
 
 export default app;

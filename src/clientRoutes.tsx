@@ -5,7 +5,7 @@ import {
   defaultConfig,
 } from "@yamada-ui/react";
 import { createRoot } from "react-dom/client";
-import { Users } from "~/features/users/pages/Users";
+import { Users } from "~/features/users/client/Users";
 
 const domNode = document.getElementById("root");
 if (domNode) {

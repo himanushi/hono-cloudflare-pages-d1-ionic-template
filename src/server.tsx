@@ -1,7 +1,7 @@
 import { createFactory } from "hono/factory";
 import { renderToString } from "react-dom/server";
 
-export const workerApi = createFactory().createHandlers((c) => {
+export const serverApi = createFactory().createHandlers((c) => {
   return c.html(
     renderToString(
       <html lang="en">

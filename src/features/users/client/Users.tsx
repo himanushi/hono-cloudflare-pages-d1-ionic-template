@@ -2,9 +2,9 @@ import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { useFetch } from "~/hooks/useFetch";
-import type { UsersAPI } from "~/workerRoutes";
+import type { API } from "~/serverRoutes";
 
-export const client = hc<UsersAPI>(location.origin);
+const client = hc<API>(location.origin);
 
 export const Users = () => {
   const limit = 10;
