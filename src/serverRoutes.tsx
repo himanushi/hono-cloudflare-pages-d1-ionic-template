@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { meApi } from "~/features/me/server/meApi";
 import { usersApi } from "~/features/users/server/usersApi";
-import { serverApi } from "./server";
+import { serverApi } from "~/server";
 
 const app = new Hono();
 

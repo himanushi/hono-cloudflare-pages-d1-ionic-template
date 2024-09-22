@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
           output: {
             entryFileNames: "static/client.js",
           },
-          external: ["@hono/zod-validator"],
+          external: ["hono", "@hono/zod-validator"],
         },
       },
       plugins: [
@@ -34,11 +34,14 @@ export default defineConfig(({ mode }) => {
   return {
     ssr: {
       external: [
+        "@capacitor/preferences",
+        "@fortawesome/free-solid-svg-icons",
+        "@yamada-ui/fontawesome",
+        "@yamada-ui/react",
         "react",
         "react-dom",
-        "@yamada-ui/react",
+        "react-router-dom",
         "swr",
-        "@capacitor/preferences",
       ],
     },
     plugins: [
