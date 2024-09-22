@@ -6,9 +6,10 @@ import {
 } from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
 import { SWRConfig } from "swr";
-import { Users } from "~/features/users/client/Users";
 import { preferencesProvider } from "~/utils/preferencesProvider";
+import { clientRoutes } from "./clientRoutes";
 
 createRoot(document.getElementById("root") as HTMLDivElement).render(
   <StrictMode>
@@ -22,7 +23,7 @@ createRoot(document.getElementById("root") as HTMLDivElement).render(
         initialThemeScheme={defaultConfig.initialThemeScheme}
       />
       <UIProvider>
-        <Users />
+        <RouterProvider router={clientRoutes} />
       </UIProvider>
     </SWRConfig>
   </StrictMode>,
