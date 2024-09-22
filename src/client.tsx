@@ -4,15 +4,15 @@ import {
   UIProvider,
   defaultConfig,
 } from "@yamada-ui/react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { SWRConfig } from "swr";
 import { Users } from "~/features/users/client/Users";
+import { preferencesProvider } from "~/utils/preferencesProvider";
 
-const domNode = document.getElementById("root");
-if (domNode) {
-  const root = createRoot(domNode);
-
-  root.render(
-    <>
+createRoot(document.getElementById("root") as HTMLDivElement).render(
+  <StrictMode>
+    <SWRConfig value={{ provider: preferencesProvider }}>
       <ColorModeScript
         type="cookie"
         initialColorMode={defaultConfig.initialColorMode}
@@ -24,8 +24,6 @@ if (domNode) {
       <UIProvider>
         <Users />
       </UIProvider>
-    </>,
-  );
-} else {
-  console.error("Root element not found");
-}
+    </SWRConfig>
+  </StrictMode>,
+);
