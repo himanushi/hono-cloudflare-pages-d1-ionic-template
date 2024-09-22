@@ -2,7 +2,12 @@ import { Text, VStack } from "@yamada-ui/react";
 
 export const HomeLayout = () => (
   <VStack gap={1}>
-    <Text>aaaa</Text>
+    <Text>
+      LINE Seedは、「成長」の意味を込めて、
+      LINEが初めて開発したフォントシリーズです。
+      ジオメトリックな形でLINEの利便性と フレンドリーなアイデンティティから
+      着想を得て制作されました。
+    </Text>
     <Text>aaaa</Text>
     <Text>aaaa</Text>
     <Text>aaaa</Text>

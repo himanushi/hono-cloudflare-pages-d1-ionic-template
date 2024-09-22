@@ -14,7 +14,7 @@ export const useLazyFetch = <ARGS, RESPONSE>({
 }): [() => void, SWRResponse<RESPONSE, any>] => {
   const response = useSWR<RESPONSE>([key, args]);
 
-  const trigger = useCallback(async () => {
+  const trigger = useCallback(() => {
     response.mutate(fetcher(api)(args as NonNullable<ARGS>));
   }, [response.mutate, api, args]);
 
