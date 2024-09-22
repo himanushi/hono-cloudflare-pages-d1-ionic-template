@@ -2,7 +2,7 @@ import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { useFetch } from "~/hooks/useFetch";
-import type { UsersAPI } from "~/index";
+import type { UsersAPI } from "~/workerRoutes";
 
 export const client = hc<UsersAPI>(location.origin);
 
@@ -11,7 +11,7 @@ export const Users = () => {
   const [offset, setOffset] = useState(0);
   const { data: users, mutate } = useFetch({
     key: "users",
-    api: client.users.$get,
+    api: client.api.users.$get,
     args: { query: { limit: limit.toString(), offset: "0" } },
   });
 
