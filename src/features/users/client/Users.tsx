@@ -3,8 +3,9 @@ import { hc } from "hono/client";
 import { useState } from "react";
 import { useFetch } from "~/hooks/useFetch";
 import type { UsersAPI } from "~/serverRoutes";
+import { clientUrl } from "~/utils/clientUrl";
 
-const client = hc<UsersAPI>(location.origin);
+const client = hc<UsersAPI>(clientUrl);
 
 export const Users = () => {
   const limit = 10;
