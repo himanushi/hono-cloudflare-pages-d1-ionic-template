@@ -8,7 +8,7 @@ export const HomeLayout = () => (
       ジオメトリックな形でLINEの利便性と フレンドリーなアイデンティティから
       着想を得て制作されました。
     </Text>
-    <Text>aaaa</Text>
+    <Text>bbbb</Text>
     <Text>aaaa</Text>
     <Text>aaaa</Text>
     <Text>aaaa</Text>

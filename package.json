@@ -2,10 +2,16 @@
   "name": "ai-threads",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"vite --port 8080\" \"wrangler pages dev --local --port 3000\"",
     "build": "vite build --mode client && vite build",
     "preview": "wrangler pages dev",
-    "deploy": "$npm_execpath run build && wrangler pages deploy"
+    "deploy": "$npm_execpath run build && wrangler pages deploy",
+    "db:create:prod": "wrangler d1 create ai-threads",
+    "db:generate": "drizzle-kit generate",
+    "db:apply": "wrangler d1 migrations apply ai-threads --local",
+    "db:apply:prod": "wrangler d1 migrations apply ai-threads",
+    "db:studio": "cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
+    "db:studio:prod": "drizzle-kit studio"
   },
   "dependencies": {
     "@capacitor/preferences": "^6.0.2",
@@ -13,6 +19,7 @@
     "@hono/zod-validator": "^0.2.2",
     "@yamada-ui/fontawesome": "^1.0.40",
     "@yamada-ui/react": "^1.5.1",
+    "drizzle-orm": "^0.33.0",
     "hono": "^4.6.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -27,6 +34,10 @@
     "@hono/vite-dev-server": "^0.15.2",
     "@types/react": "^18.3.6",
     "@types/react-dom": "^18.3.0",
+    "better-sqlite3": "^11.3.0",
+    "concurrently": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "drizzle-kit": "^0.24.2",
     "vite": "^5.4.5",
     "vite-plugin-static-copy": "^1.0.6",
     "vite-tsconfig-paths": "^5.0.1",
