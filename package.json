@@ -2,15 +2,13 @@
   "name": "ai-threads",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite --port 8080\" \"wrangler pages dev --local --port 3000\"",
+    "dev": "concurrently \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio\"",
     "build": "vite build --mode client && vite build",
-    "preview": "wrangler pages dev --local",
     "deploy": "$npm_execpath run build && wrangler pages deploy",
     "db:create:prod": "wrangler d1 create ai-threads",
     "db:generate": "drizzle-kit generate",
     "db:apply": "wrangler d1 migrations apply ai-threads --local",
     "db:apply:prod": "wrangler d1 migrations apply ai-threads",
-    "db:studio": "cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
     "db:studio:prod": "drizzle-kit studio"
   },
   "dependencies": {
