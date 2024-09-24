@@ -11,7 +11,6 @@ const client = hc<UsersAPI>(clientUrl);
 
 export const Users = () => {
   const limit = 10;
-  const [offset, setOffset] = useState(0);
   const { mutate } = useSWRConfig();
   const { data: users } = useFetch({
     key: "getUsers",
@@ -22,7 +21,7 @@ export const Users = () => {
   const [create] = useLazyFetch({
     key: "postUsers",
     api: client.api.users.$post,
-    args: { json: { name: "test" } },
+    args: { json: { name: `test${Date()}` } },
   });
 
   return (

@@ -7,15 +7,21 @@ export const useFetch = <ARGS, RESPONSE>({
   api,
   args,
   skip = false,
+  focusThrottleInterval = 0,
+  errorRetryCount = 0,
   ...options
 }: {
   key?: string;
-  api: ApiFunction<ARGS, RESPONSE>;
+  api: ApiFunction<ARGS, RESPONSE> | null;
   args: ARGS;
   skip?: boolean;
 } & SWRConfiguration) =>
   useSWR(
     skip ? undefined : key,
-    fetcher(api)(args as NonNullable<ARGS>),
-    options,
+    api ? fetcher(api)(args as NonNullable<ARGS>) : null,
+    {
+      ...options,
+      focusThrottleInterval,
+      errorRetryCount,
+    },
   );
