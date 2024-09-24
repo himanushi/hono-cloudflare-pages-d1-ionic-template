@@ -1,6 +1,6 @@
 import useSWR, { type SWRConfiguration } from "swr";
-import type { ApiFunction } from "../types/ApiFunction";
-import { fetcher } from "../utils/fetcher";
+import type { ApiFunction } from "~/types/ApiFunction";
+import { fetcher } from "~/utils/fetcher";
 
 export const useFetch = <ARGS, RESPONSE>({
   key = "api",
@@ -17,7 +17,7 @@ export const useFetch = <ARGS, RESPONSE>({
   skip?: boolean;
 } & SWRConfiguration) =>
   useSWR(
-    skip ? undefined : key,
+    skip ? undefined : [key, args],
     api ? fetcher(api)(args as NonNullable<ARGS>) : null,
     {
       ...options,

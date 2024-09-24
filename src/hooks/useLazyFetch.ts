@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import type { SWRConfiguration, SWRResponse } from "swr";
-import type { ApiFunction } from "../types/ApiFunction";
-import { fetcher } from "../utils/fetcher";
-import { useFetch } from "./useFetch";
+import { useFetch } from "~/hooks/useFetch";
+import type { ApiFunction } from "~/types/ApiFunction";
+import { fetcher } from "~/utils/fetcher";
 
 export const useLazyFetch = <ARGS, RESPONSE>({
   key = "api",
