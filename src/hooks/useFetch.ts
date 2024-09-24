@@ -15,7 +15,7 @@ export const useFetch = <ARGS, RESPONSE>({
   skip?: boolean;
 } & SWRConfiguration) =>
   useSWR(
-    skip ? undefined : [key, args],
+    skip ? undefined : key,
     fetcher(api)(args as NonNullable<ARGS>),
     options,
   );
