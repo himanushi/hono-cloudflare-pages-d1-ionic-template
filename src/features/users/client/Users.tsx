@@ -2,6 +2,7 @@ import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { useFetch } from "~/hooks/useFetch";
+import { useLazyFetch } from "~/hooks/useLazyFetch";
 import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
 
@@ -16,6 +17,11 @@ export const Users = () => {
     args: { query: { limit: limit.toString(), offset: "0" } },
   });
 
+  const [create] = useLazyFetch({
+    api: client.api.users.$post,
+    args: { json: { name: "test" } },
+  });
+
   return (
     <Flex flexDirection="column">
       {users?.map((user) => (
@@ -23,7 +29,7 @@ export const Users = () => {
       ))}
       <Button
         onClick={() => {
-          setOffset((prev) => prev + limit);
+          create();
         }}
       >
         Users

@@ -1,8 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
+import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
+import { users } from "~/schema";
 
-export const usersApi = createFactory().createHandlers(
+export const getUsersApi = createFactory().createHandlers(
   zValidator(
     "query",
     z.object({
@@ -10,14 +12,27 @@ export const usersApi = createFactory().createHandlers(
       offset: z.string().transform((v) => Number.parseInt(v, 10)),
     }),
   ),
-  (c) => {
+  async (c) => {
     const { limit, offset } = c.req.valid("query");
 
-    const users = Array.from({ length: limit }).map((_, i) => ({
-      id: offset + i,
-      name: `User ${offset + i}`,
-    }));
+    const db = drizzle(c.env.DB);
+    const result = await db.select().from(users).all();
+    return c.json(result);
+  },
+);
 
-    return c.json(users);
+export const postUsersApi = createFactory().createHandlers(
+  zValidator(
+    "json",
+    z.object({
+      name: z.string(),
+    }),
+  ),
+  async (c) => {
+    const { name } = c.req.valid("json");
+
+    const db = drizzle(c.env.DB);
+    const result = await db.insert(users).values({ name }).execute();
+    return c.json(result);
   },
 );

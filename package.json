@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "concurrently \"vite --port 8080\" \"wrangler pages dev --local --port 3000\"",
     "build": "vite build --mode client && vite build",
-    "preview": "wrangler pages dev",
+    "preview": "wrangler pages dev --local",
     "deploy": "$npm_execpath run build && wrangler pages deploy",
     "db:create:prod": "wrangler d1 create ai-threads",
     "db:generate": "drizzle-kit generate",
