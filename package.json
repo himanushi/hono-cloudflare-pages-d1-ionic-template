@@ -2,6 +2,7 @@
   "name": "ai-threads",
   "type": "module",
   "scripts": {
+    "ai": "node ./scripts/copyFiles.js",
     "dev": "concurrently \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio\"",
     "build": "vite build --mode client && vite build",
     "deploy": "$npm_execpath run build && wrangler pages deploy",
@@ -33,6 +34,7 @@
     "@types/react": "^18.3.6",
     "@types/react-dom": "^18.3.0",
     "better-sqlite3": "^11.3.0",
+    "clipboardy": "^4.0.0",
     "concurrently": "^9.0.1",
     "cross-env": "^7.0.3",
     "drizzle-kit": "^0.24.2",
