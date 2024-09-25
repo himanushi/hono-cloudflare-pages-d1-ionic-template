@@ -10,24 +10,6 @@ const client = hc<UsersAPI>(clientUrl);
 
 export const Users = () => {
   const limit = 10;
-  // const { data, setSize } = useInfiniteFetch({
-  //   getKey: (pageIndex, previousPageData) => {
-  //     console.log(pageIndex, previousPageData);
-  //     if (previousPageData && !previousPageData.length) return null;
-  //     return [
-  //       "getUsers",
-  //       {
-  //         query: {
-  //           limit: limit.toString(),
-  //           offset: (pageIndex * limit).toString(),
-  //         },
-  //       },
-  //     ];
-  //   },
-  //   api: client.api.users.$get,
-  //   args: { query: { limit: limit.toString(), offset: offset.toString() } },
-  // });
-
   const { data, setSize } = useSWRInfinite(
     (pageIndex, _previousPageData) => [client.api.users.$get, pageIndex],
     async (props) => {
