@@ -1,37 +1,49 @@
-import { Button, Flex } from "@yamada-ui/react";
+import { Box, Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { useState } from "react";
-import { useSWRConfig } from "swr";
-import { useFetch } from "~/hooks/useFetch";
-import { useInfiniteFetch } from "~/hooks/useInfiniteFetch";
+import useSWRInfinite from "swr/infinite";
 import { useLazyFetch } from "~/hooks/useLazyFetch";
 import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
+import { fetcher } from "~/utils/fetcher";
 
 const client = hc<UsersAPI>(clientUrl);
 
 export const Users = () => {
   const limit = 10;
-  const [offset, setOffset] = useState(0);
-  const { data, setSize } = useInfiniteFetch({
-    getKey: (pageIndex, previousPageData) => {
-      console.log(pageIndex, previousPageData);
-      if (previousPageData && !previousPageData.length) return null;
-      return [
-        "getUsers",
-        {
-          query: {
-            limit: limit.toString(),
-            offset: (pageIndex * limit).toString(),
-          },
-        },
-      ];
-    },
-    api: client.api.users.$get,
-    args: { query: { limit: limit.toString(), offset: offset.toString() } },
-  });
+  // const { data, setSize } = useInfiniteFetch({
+  //   getKey: (pageIndex, previousPageData) => {
+  //     console.log(pageIndex, previousPageData);
+  //     if (previousPageData && !previousPageData.length) return null;
+  //     return [
+  //       "getUsers",
+  //       {
+  //         query: {
+  //           limit: limit.toString(),
+  //           offset: (pageIndex * limit).toString(),
+  //         },
+  //       },
+  //     ];
+  //   },
+  //   api: client.api.users.$get,
+  //   args: { query: { limit: limit.toString(), offset: offset.toString() } },
+  // });
 
-  const users = (data ?? [[]]).flat();
+  const { data, setSize } = useSWRInfinite(
+    (pageIndex, _previousPageData) => [client.api.users.$get, pageIndex],
+    async (props) => {
+      console.log(props);
+      const api = props[0];
+      const pageIndex = props[1];
+      return await fetcher(api)({
+        query: {
+          limit: limit.toString(),
+          offset: (pageIndex * limit).toString(),
+        },
+      })();
+    },
+  );
+
+  const users = (data ?? []).flat();
 
   const [create] = useLazyFetch({
     key: "postUsers",
@@ -42,10 +54,10 @@ export const Users = () => {
   return (
     <Flex flexDirection="column">
       {users?.map((user) => (
-        <div key={user.id}>
+        <Box key={user.id}>
           {user.name}
           {user.id}
-        </div>
+        </Box>
       ))}
       <Button
         onClick={async () => {
@@ -55,7 +67,7 @@ export const Users = () => {
         Users
       </Button>
       <Button
-        onClick={async () => {
+        onClick={() => {
           setSize((prev) => prev + 1);
         }}
       >
