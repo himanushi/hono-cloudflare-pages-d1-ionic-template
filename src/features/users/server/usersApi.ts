@@ -1,4 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
+import { desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
@@ -21,6 +22,7 @@ export const getUsersApi = createFactory().createHandlers(
       .from(users)
       .limit(limit)
       .offset(offset)
+      .orderBy(desc(users.id))
       .all();
     return c.json(result);
   },
