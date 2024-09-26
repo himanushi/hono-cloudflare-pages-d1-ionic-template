@@ -10,7 +10,6 @@ const client = hc<UsersAPI>(clientUrl);
 const limit = 100;
 
 export const Users = () => {
-  const [count, setCount] = useState(0);
   const {
     items: users,
     hasNext,
@@ -18,7 +17,7 @@ export const Users = () => {
     ...response
   } = useInfiniteFetch({
     getKey: (pageIndex) =>
-      `/api/users?limit=${limit}&offset=${pageIndex * limit}&count=${count}`,
+      `/api/users?limit=${limit}&offset=${pageIndex * limit}`,
     fetcher: async (key: string) => {
       const url = new URL(key, clientUrl);
       const limit = url.searchParams.get("limit");
@@ -70,13 +69,6 @@ export const Users = () => {
         }}
       >
         Reset
-      </Button>
-      <Button
-        onClick={() => {
-          setCount((prev) => prev + 1);
-        }}
-      >
-        Count Up
       </Button>
     </Flex>
   );
