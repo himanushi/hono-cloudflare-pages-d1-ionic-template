@@ -1,41 +1,37 @@
 import { Box, Button, Flex } from "@yamada-ui/react";
-import {
-  type ClientRequestOptions,
-  type ClientResponse,
-  hc,
-} from "hono/client";
-import { useCallback } from "react";
-import useSWRInfinite from "swr/infinite";
+import { hc } from "hono/client";
+import { useState } from "react";
+import { useInfiniteFetch } from "~/hooks/useInfiniteFetch";
 import { useLazyFetch } from "~/hooks/useLazyFetch";
 import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
-import { fetcher } from "~/utils/fetcher";
 
 const client = hc<UsersAPI>(clientUrl);
-
-const limit = 10;
+const limit = 100;
 
 export const Users = () => {
-  const getKey = useCallback(
-    (pageIndex: number) => `/api/users?limit=10&offset=${pageIndex * limit}`,
-    [],
-  );
-
-  const infiniteFetcher = useCallback(async (key: string) => {
-    const url = new URL(key, clientUrl);
-    const limit = url.searchParams.get("limit") || "10";
-    const offset = url.searchParams.get("offset") || "0";
-
-    const response = await client.api.users.$get({
-      query: { limit, offset },
-    });
-
-    return await response.json();
-  }, []);
-
-  const { data, setSize } = useSWRInfinite(getKey, infiniteFetcher);
-
-  const users = (data ?? []).flat();
+  const [count, setCount] = useState(0);
+  const {
+    items: users,
+    hasNext,
+    setSize,
+    ...response
+  } = useInfiniteFetch({
+    getKey: (pageIndex) =>
+      `/api/users?limit=${limit}&offset=${pageIndex * limit}&count=${count}`,
+    fetcher: async (key: string) => {
+      const url = new URL(key, clientUrl);
+      const limit = url.searchParams.get("limit");
+      const offset = url.searchParams.get("offset");
+      if (limit !== null && offset !== null) {
+        const response = await client.api.users.$get({
+          query: { limit, offset },
+        });
+        return await response.json();
+      }
+      return [];
+    },
+  });
 
   const [create] = useLazyFetch({
     key: "postUsers",
@@ -45,7 +41,7 @@ export const Users = () => {
 
   return (
     <Flex flexDirection="column">
-      {users?.map((user) => (
+      {users.map((user) => (
         <Box key={user.id}>
           {user.name}
           {user.id}
@@ -58,12 +54,29 @@ export const Users = () => {
       >
         Users
       </Button>
+      {hasNext && (
+        <Button
+          onClick={() => {
+            setSize((prev) => prev + 1);
+          }}
+        >
+          Next
+        </Button>
+      )}
       <Button
         onClick={() => {
-          setSize((prev) => prev + 1);
+          response.mutate([]);
+          setSize(1);
         }}
       >
-        Next
+        Reset
+      </Button>
+      <Button
+        onClick={() => {
+          setCount((prev) => prev + 1);
+        }}
+      >
+        Count Up
       </Button>
     </Flex>
   );
