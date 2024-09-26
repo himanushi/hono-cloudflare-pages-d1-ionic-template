@@ -1,22 +1,32 @@
-import type { SWRConfiguration } from "swr";
-import useSWRInfinite, { type SWRInfiniteKeyLoader } from "swr/infinite";
-import type { ApiFunction } from "~/types/ApiFunction";
-import { fetcher } from "~/utils/fetcher";
+import type { BareFetcher } from "swr";
+import useSWRInfinite, {
+  type SWRInfiniteConfiguration,
+  type SWRInfiniteKeyLoader,
+} from "swr/infinite";
 
-export const useInfiniteFetch = <ARGS, RESPONSE>({
+export const useInfiniteFetch = <RESPONSE>({
   getKey,
-  api,
-  args,
-  focusThrottleInterval = 0,
-  errorRetryCount = 0,
+  fetcher,
   ...options
 }: {
   getKey: SWRInfiniteKeyLoader;
-  api: ApiFunction<ARGS, RESPONSE> | null;
-  args: ARGS;
-} & SWRConfiguration) =>
-  useSWRInfinite(getKey, api ? fetcher(api)(args as NonNullable<ARGS>) : null, {
+  fetcher: BareFetcher<RESPONSE>;
+} & SWRInfiniteConfiguration) => {
+  const response = useSWRInfinite(getKey, fetcher, {
+    revalidateOnFocus: false,
+    focusThrottleInterval: 0,
+    errorRetryCount: 0,
     ...options,
-    focusThrottleInterval,
-    errorRetryCount,
   });
+  const data = response.data ?? [[]];
+  const hasNext = !(
+    data[data.length - 1] && data[data.length - 1].length === 0
+  );
+  const items = data.flat() as RESPONSE;
+
+  return {
+    ...response,
+    hasNext,
+    items,
+  };
+};
