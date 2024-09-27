@@ -17,10 +17,5 @@ export const useFetch = <ARGS, RESPONSE>({
   useSWR(
     skip ? undefined : [key, args],
     api ? fetcher(api)(args as NonNullable<ARGS>) : null,
-    {
-      revalidateOnFocus: false,
-      focusThrottleInterval: 0,
-      errorRetryCount: 0,
-      ...options,
-    },
+    options,
   );

@@ -26,7 +26,17 @@ const App = () => {
   }
 
   return (
-    <SWRConfig value={{ provider: preferencesProvider(value) }}>
+    <SWRConfig
+      value={{
+        provider: preferencesProvider(value),
+        revalidateOnReconnect: false,
+        revalidateOnFocus: false,
+        focusThrottleInterval: 0,
+        errorRetryCount: 0,
+        dedupingInterval: 3000,
+        shouldRetryOnError: false,
+      }}
+    >
       <ColorModeScript
         type="cookie"
         initialColorMode={defaultConfig.initialColorMode}

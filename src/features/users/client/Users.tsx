@@ -1,6 +1,5 @@
 import { Box, Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { useState } from "react";
 import { useInfiniteFetch } from "~/hooks/useInfiniteFetch";
 import { useLazyFetch } from "~/hooks/useLazyFetch";
 import type { UsersAPI } from "~/serverRoutes";
@@ -40,6 +39,13 @@ export const Users = () => {
 
   return (
     <Flex flexDirection="column">
+      <Button
+        onClick={() => {
+          console.log(response);
+        }}
+      >
+        ログイン
+      </Button>
       {users.map((user) => (
         <Box key={user.id}>
           {user.name}
