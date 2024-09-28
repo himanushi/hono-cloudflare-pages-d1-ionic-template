@@ -1,5 +1,9 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import {
+  googleAuthApi,
+  googleAuthCallbackApi,
+} from "~/features/auth/server/googleAuthApi";
 import { meApi } from "~/features/me/server/meApi";
 import { getUsersApi, postUsersApi } from "~/features/users/server/usersApi";
 import { serverApi } from "~/server";
@@ -9,6 +13,10 @@ type Bindings = {
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+app
+  .get("/auth/google", ...googleAuthApi)
+  .get("/callback", ...googleAuthCallbackApi);
 
 app.use("*", cors());
 
