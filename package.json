@@ -21,6 +21,7 @@
     "@yamada-ui/react": "^1.5.1",
     "drizzle-orm": "^0.33.0",
     "hono": "^4.6.1",
+    "jose": "^5.9.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
