@@ -12,7 +12,11 @@ export const useInfiniteFetch = <RESPONSE>({
   getKey: SWRInfiniteKeyLoader;
   fetcher: BareFetcher<RESPONSE>;
 } & SWRInfiniteConfiguration) => {
-  const response = useSWRInfinite(getKey, fetcher, options);
+  const response = useSWRInfinite(getKey, fetcher, {
+    persistSize: false,
+    revalidateFirstPage: true,
+    ...options,
+  });
   const data = response.data ?? [[]];
   const hasNext = !(
     data[data.length - 1] && data[data.length - 1].length === 0

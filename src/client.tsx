@@ -35,6 +35,7 @@ const App = () => {
         errorRetryCount: 0,
         dedupingInterval: 3000,
         shouldRetryOnError: false,
+        keepPreviousData: true,
       }}
     >
       <ColorModeScript

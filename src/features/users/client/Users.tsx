@@ -70,8 +70,7 @@ export const Users = () => {
       )}
       <Button
         onClick={() => {
-          response.mutate([]);
-          setSize(1);
+          setSize((prev) => prev + 1);
         }}
       >
         Reset
