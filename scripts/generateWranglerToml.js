@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const devTomlPath = "wrangler.dev.toml";
+const devTomlPath = "wrangler.local.toml";
 let tomlContent = fs.readFileSync(devTomlPath, "utf8");
 
 for (const [key, value] of Object.entries(process.env)) {
