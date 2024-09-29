@@ -1,8 +1,10 @@
+import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import {
-  googleAuthApi,
   googleAuthCallbackApi,
+  googleAuthLoginApi,
+  googleAuthLogoutApi,
 } from "~/features/auth/server/googleAuthApi";
 import { meApi } from "~/features/me/server/meApi";
 import { getUsersApi, postUsersApi } from "~/features/users/server/usersApi";
@@ -14,11 +16,13 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app
-  .get("/auth/google", ...googleAuthApi)
-  .get("/callback", ...googleAuthCallbackApi);
-
 app.use("*", cors());
+
+app
+  .use("/auth/login", oidcAuthMiddleware())
+  .get("/auth/login", ...googleAuthLoginApi)
+  .get("/auth/callback", ...googleAuthCallbackApi)
+  .get("/auth/logout", ...googleAuthLogoutApi);
 
 const _usersApi = app
   .get("/api/users", ...getUsersApi)
