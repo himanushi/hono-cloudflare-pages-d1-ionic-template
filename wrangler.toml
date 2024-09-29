@@ -4,13 +4,13 @@ pages_build_output_dir = "./dist"
 compatibility_flags = [ "nodejs_compat" ]
 
 # local では .dev.vers に入力
-[vars]
-OIDC_AUTH_SECRET = "${OIDC_AUTH_SECRET}"
-OIDC_ISSUER = "${OIDC_ISSUER}"
-OIDC_CLIENT_ID = "${OIDC_CLIENT_ID}"
-OIDC_CLIENT_SECRET = "${OIDC_CLIENT_SECRET}"
-OIDC_REDIRECT_URI = "${OIDC_REDIRECT_URI}"
-OIDC_SCOPES = "${OIDC_SCOPES}"
+# [vars]
+# OIDC_AUTH_SECRET = "${OIDC_AUTH_SECRET}"
+# OIDC_ISSUER = "${OIDC_ISSUER}"
+# OIDC_CLIENT_ID = "${OIDC_CLIENT_ID}"
+# OIDC_CLIENT_SECRET = "${OIDC_CLIENT_SECRET}"
+# OIDC_REDIRECT_URI = "${OIDC_REDIRECT_URI}"
+# OIDC_SCOPES = "${OIDC_SCOPES}"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
