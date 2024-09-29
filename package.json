@@ -17,6 +17,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@hono/oidc-auth": "^1.1.0",
     "@hono/zod-validator": "^0.2.2",
+    "@tanstack/react-query": "^5.56.2",
     "@yamada-ui/fontawesome": "^1.0.40",
     "@yamada-ui/react": "^1.5.1",
     "drizzle-orm": "^0.33.0",
