@@ -1,5 +1,5 @@
-const fs = require("node:fs");
-const dotenv = require("dotenv");
+import fs from "node:fs";
+import dotenv from "dotenv";
 
 dotenv.config();
 

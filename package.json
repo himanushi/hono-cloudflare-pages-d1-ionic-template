@@ -4,7 +4,7 @@
   "scripts": {
     "ai": "node ./scripts/copyFiles.js",
     "dev": "concurrently \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio\"",
-    "build": "vite build --mode client && vite build",
+    "build": "node ./scripts/generateWranglerToml.js && vite build --mode client && vite build",
     "deploy": "$npm_execpath run build && wrangler pages deploy",
     "db:create:prod": "wrangler d1 create ai-threads",
     "db:generate": "drizzle-kit generate",
@@ -39,6 +39,7 @@
     "clipboardy": "^4.0.0",
     "concurrently": "^9.0.1",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.24.2",
     "vite": "^5.4.5",
     "vite-plugin-static-copy": "^1.0.6",
