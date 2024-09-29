@@ -9,7 +9,7 @@
     "db:create:prod": "wrangler d1 create ai-threads",
     "db:generate": "drizzle-kit generate",
     "db:apply": "wrangler d1 migrations apply ai-threads --local",
-    "db:apply:prod": "wrangler d1 migrations apply ai-threads",
+    "db:apply:prod": "wrangler d1 migrations apply ai-threads --remote",
     "db:studio:prod": "drizzle-kit studio"
   },
   "dependencies": {
