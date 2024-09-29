@@ -29,11 +29,11 @@ const App = () => {
     <SWRConfig
       value={{
         provider: preferencesProvider(value),
-        revalidateOnReconnect: false,
-        revalidateOnFocus: false,
+        revalidateOnReconnect: true,
+        revalidateOnFocus: true,
         focusThrottleInterval: 0,
         errorRetryCount: 0,
-        dedupingInterval: 3000,
+        dedupingInterval: 0,
         shouldRetryOnError: false,
         keepPreviousData: true,
       }}
