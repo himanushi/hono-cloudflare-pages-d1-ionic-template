@@ -1,16 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { useFetch } from "~/hooks/useFetch";
 import type { MeAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
+import { fetcher } from "~/utils/fetcher";
 
 export const client = hc<MeAPI>(clientUrl);
 
 export const Me = () => {
-  const { data: me } = useFetch({
-    key: "users",
-    api: client.api.me.$get,
-    args: { query: { name: "yamada" } },
+  const { data: me } = useQuery({
+    queryKey: ["me"],
+    queryFn: async () =>
+      await fetcher(client.api.me.$get)({ query: { name: "yamada" } })(),
   });
 
   return (

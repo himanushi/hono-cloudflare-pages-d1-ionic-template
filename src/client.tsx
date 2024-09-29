@@ -1,43 +1,20 @@
-import { Preferences } from "@capacitor/preferences";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   ColorModeScript,
   ThemeSchemeScript,
   UIProvider,
   defaultConfig,
 } from "@yamada-ui/react";
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { SWRConfig } from "swr";
-import { preferencesProvider } from "~/utils/preferencesProvider";
 import { clientRoutes } from "./clientRoutes";
 
+const queryClient = new QueryClient();
+
 const App = () => {
-  const [value, setValue] = useState<string | null | undefined>();
-
-  useEffect(() => {
-    Preferences.get({ key: "app-cache" }).then(({ value }) => {
-      setValue(value);
-    });
-  }, []);
-
-  if (value === undefined) {
-    return <></>;
-  }
-
   return (
-    <SWRConfig
-      value={{
-        provider: preferencesProvider(value),
-        revalidateOnReconnect: false,
-        revalidateOnFocus: false,
-        focusThrottleInterval: 0,
-        errorRetryCount: 0,
-        dedupingInterval: 0,
-        shouldRetryOnError: false,
-        keepPreviousData: true,
-      }}
-    >
+    <QueryClientProvider client={queryClient}>
       <ColorModeScript
         type="cookie"
         initialColorMode={defaultConfig.initialColorMode}
@@ -49,7 +26,7 @@ const App = () => {
       <UIProvider>
         <RouterProvider router={clientRoutes} />
       </UIProvider>
-    </SWRConfig>
+    </QueryClientProvider>
   );
 };
 
