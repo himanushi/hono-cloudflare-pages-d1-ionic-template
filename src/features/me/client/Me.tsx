@@ -10,8 +10,7 @@ export const client = hc<MeAPI>(clientUrl);
 export const Me = () => {
   const { data: me } = useQuery({
     queryKey: ["me"],
-    queryFn: async () =>
-      await fetcher(client.api.me.$get)({ query: { name: "yamada" } })(),
+    queryFn: fetcher(client.api.me.$get, { query: { name: "yamada" } }),
   });
 
   return (
