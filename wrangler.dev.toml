@@ -1,0 +1,18 @@
+name = "ai-threads"
+compatibility_date = "2024-09-16"
+pages_build_output_dir = "./dist"
+compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+OIDC_AUTH_SECRET = "${OIDC_AUTH_SECRET}"
+OIDC_ISSUER = "${OIDC_ISSUER}"
+OIDC_CLIENT_ID = "${OIDC_CLIENT_ID}"
+OIDC_CLIENT_SECRET = "${OIDC_CLIENT_SECRET}"
+OIDC_REDIRECT_URI = "${OIDC_REDIRECT_URI}"
+OIDC_SCOPES = "${OIDC_SCOPES}"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-threads"
+migrations_dir = "drizzle/migrations"
+database_id = "${CLOUDFLARE_DATABASE_ID}"
