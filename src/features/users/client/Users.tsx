@@ -6,7 +6,7 @@ import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
 
 const client = hc<UsersAPI>(clientUrl);
-const limit = 100;
+const limit = 10;
 
 export const Users = () => {
   const {

@@ -15,7 +15,7 @@ export const useInfiniteFetch = <RESPONSE>({
   const response = useSWRInfinite(getKey, fetcher, {
     persistSize: false,
     revalidateFirstPage: true,
-    revalidateAll: true,
+    // revalidateAll: true,
     ...options,
   });
   const data = response.data ?? [[]];
