@@ -29,6 +29,7 @@ const excludeFiles = [
   ".env",
   "README.md",
   ".keep",
+  "wrangler.toml",
 ];
 
 function directoryContents(dir, depth = 0) {
