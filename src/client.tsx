@@ -12,7 +12,13 @@ import { RouterProvider } from "react-router-dom";
 import { createPreferencesPersister } from "~/utils/createPreferencesPersister";
 import { clientRoutes } from "./clientRoutes";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Number.POSITIVE_INFINITY,
+    },
+  },
+});
 
 const App = () => {
   return (
