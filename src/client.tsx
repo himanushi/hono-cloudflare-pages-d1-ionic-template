@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import {
   ColorModeScript,
   ThemeSchemeScript,
@@ -8,13 +9,17 @@ import {
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { createPreferencesPersister } from "~/utils/createPreferencesPersister";
 import { clientRoutes } from "./clientRoutes";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister: createPreferencesPersister() }}
+    >
       <ColorModeScript
         type="cookie"
         initialColorMode={defaultConfig.initialColorMode}
@@ -26,7 +31,7 @@ const App = () => {
       <UIProvider>
         <RouterProvider router={clientRoutes} />
       </UIProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 };
 
