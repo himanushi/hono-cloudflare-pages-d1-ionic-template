@@ -6,4 +6,8 @@ export const clientRoutes = createBrowserRouter([
     path: "/",
     element: <HomeLayout />,
   },
+  {
+    path: "/auth/callback",
+    element: <HomeLayout />,
+  },
 ]);

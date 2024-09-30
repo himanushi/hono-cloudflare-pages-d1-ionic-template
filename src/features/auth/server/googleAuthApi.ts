@@ -8,11 +8,9 @@ export const googleAuthLoginApi = createFactory().createHandlers(async (c) => {
 });
 
 export const googleAuthCallbackApi = createFactory().createHandlers(
-  async (c) => {
-    return processOAuthCallback(c);
-  },
+  async (c) => await processOAuthCallback(c),
 );
 
-export const googleAuthLogoutApi = createFactory().createHandlers(async (c) => {
-  await revokeSession(c);
-});
+export const googleAuthLogoutApi = createFactory().createHandlers(
+  async (c) => await revokeSession(c),
+);
