@@ -8,7 +8,7 @@ const query = hc<UsersAPI>(clientUrl);
 const limit = 10;
 
 export const Users = () => {
-  const { data, fetchNextPage, refetch } = useInfiniteQuery({
+  const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ["users"],
     queryFn: ({ pageParam }) =>
       query.api.users
