@@ -27,6 +27,7 @@ const excludeFiles = [
   "tsconfig.node.json",
   "static",
   ".env",
+  ".env.local",
   "README.md",
   ".keep",
   "wrangler.toml",
