@@ -16,7 +16,13 @@ export const Me = () => {
   return (
     <Flex flexDirection="column">
       <div>{me?.name}</div>
-      <Button>Me</Button>
+      <Button
+        onClick={() => {
+          window.open("/auth/login", "_blank");
+        }}
+      >
+        google login
+      </Button>
     </Flex>
   );
 };

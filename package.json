@@ -3,8 +3,8 @@
   "type": "module",
   "scripts": {
     "ai": "node ./scripts/copyFiles.js",
-    "dev": "concurrently \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio\"",
-    "build": "node ./scripts/generateWranglerToml.js && vite build --mode client && vite build",
+    "dev": "concurrently \"node ./scripts/generateWranglerToml.js\" \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio\"",
+    "build": "node ./scripts/prodGenerateWranglerToml.js && vite build --mode client && vite build",
     "deploy": "$npm_execpath run build && wrangler pages deploy",
     "db:create:prod": "wrangler d1 create ai-threads",
     "db:generate": "drizzle-kit generate",
