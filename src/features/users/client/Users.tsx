@@ -5,10 +5,9 @@ import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
 
 const query = hc<UsersAPI>(clientUrl);
+const limit = 10;
 
 export const Users = () => {
-  const limit = 10;
-
   const { data, fetchNextPage, refetch } = useInfiniteQuery({
     queryKey: ["users"],
     queryFn: ({ pageParam }) =>
