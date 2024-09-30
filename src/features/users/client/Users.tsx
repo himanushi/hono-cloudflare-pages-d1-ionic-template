@@ -43,7 +43,9 @@ export const Users = () => {
           await query.api.users.$post({
             json: { name: "test" },
           });
-          await refetch();
+          client.resetQueries({
+            queryKey: ["users"],
+          });
         }}
       >
         Users
@@ -54,15 +56,6 @@ export const Users = () => {
         }}
       >
         Next
-      </Button>
-      <Button
-        onClick={() => {
-          client.resetQueries({
-            queryKey: ["users"],
-          });
-        }}
-      >
-        Reset
       </Button>
     </Flex>
   );
