@@ -24,6 +24,7 @@ export const getUsersApi = createFactory().createHandlers(
       .offset(offset)
       .orderBy(desc(users.id))
       .all();
+
     return c.json(result);
   },
 );
