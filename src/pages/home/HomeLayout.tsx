@@ -5,5 +5,6 @@ import { Users } from "~/features/users/client/Users";
 export const HomeLayout = () => (
   <VStack gap={1}>
     <Me />
+    <Users />
   </VStack>
 );
