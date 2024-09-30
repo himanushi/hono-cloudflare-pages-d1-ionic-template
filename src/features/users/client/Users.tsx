@@ -1,17 +1,18 @@
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
 
-const client = hc<UsersAPI>(clientUrl);
-const limit = 10;
+const query = hc<UsersAPI>(clientUrl);
 
 export const Users = () => {
+  const limit = 10;
+
   const { data, fetchNextPage, refetch } = useInfiniteQuery({
     queryKey: ["users"],
     queryFn: ({ pageParam }) =>
-      client.api.users
+      query.api.users
         .$get({
           query: {
             limit: limit.toString(),
@@ -19,7 +20,7 @@ export const Users = () => {
           },
         })
         .then((res) => res.json()),
-    initialPageParam: { offset: 0, limit },
+    initialPageParam: { offset: 0, limit: 10 },
     getNextPageParam: (lastPage, _allPages, lastPageParam, _allPageParams) =>
       lastPage.length === 0
         ? undefined
@@ -27,6 +28,8 @@ export const Users = () => {
   });
 
   const users = (data ?? { pages: [] }).pages.flat();
+
+  const client = useQueryClient();
 
   return (
     <Flex flexDirection="column">
@@ -38,7 +41,7 @@ export const Users = () => {
       ))}
       <Button
         onClick={async () => {
-          await client.api.users.$post({
+          await query.api.users.$post({
             json: { name: "test" },
           });
           await refetch();
@@ -54,9 +57,11 @@ export const Users = () => {
         Next
       </Button>
       <Button
-      // onClick={() => {
-      //   refetch();
-      // }}
+        onClick={() => {
+          client.resetQueries({
+            queryKey: ["users"],
+          });
+        }}
       >
         Reset
       </Button>
