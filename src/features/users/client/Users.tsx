@@ -8,31 +8,22 @@ const client = hc<UsersAPI>(clientUrl);
 const limit = 10;
 
 export const Users = () => {
-  const { data, fetchNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, refetch } = useInfiniteQuery({
     queryKey: ["users"],
-    queryFn: async ({ pageParam }) => {
-      const res = await client.api.users.$get({
-        query: { limit: limit.toString(), offset: pageParam.offset.toString() },
-      });
-
-      return await res.json();
-    },
+    queryFn: ({ pageParam }) =>
+      client.api.users
+        .$get({
+          query: {
+            limit: limit.toString(),
+            offset: pageParam.offset.toString(),
+          },
+        })
+        .then((res) => res.json()),
     initialPageParam: { offset: 0, limit },
     getNextPageParam: (lastPage, _allPages, lastPageParam, _allPageParams) =>
       lastPage.length === 0
         ? undefined
         : { offset: lastPageParam.offset + limit, limit },
-  });
-
-  useMutation({
-    mutationKey: ["createUser"],
-    mutationFn: async () => {
-      const res = await client.api.users.$post({
-        json: { name: "test" },
-      });
-
-      return await res.json();
-    },
   });
 
   const users = (data ?? { pages: [] }).pages.flat();
@@ -45,13 +36,16 @@ export const Users = () => {
           {user.id}
         </Box>
       ))}
-      {/* <Button
+      <Button
         onClick={async () => {
-          await create();
+          await client.api.users.$post({
+            json: { name: "test" },
+          });
+          await refetch();
         }}
       >
         Users
-      </Button> */}
+      </Button>
       <Button
         onClick={() => {
           fetchNextPage();
