@@ -10,8 +10,9 @@ import { meApi } from "~/features/me/server/meApi";
 import { getUsersApi, postUsersApi } from "~/features/users/server/usersApi";
 import { serverApi } from "~/server";
 
-type Bindings = {
+export type Bindings = {
   DB: D1Database;
+  COOKIE_SECRET: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
