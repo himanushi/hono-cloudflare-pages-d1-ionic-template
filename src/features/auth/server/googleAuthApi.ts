@@ -3,8 +3,7 @@ import { createFactory } from "hono/factory";
 
 export const googleAuthLoginApi = createFactory().createHandlers(async (c) => {
   const auth = await getAuth(c);
-  console.log(auth);
-  return c.text(`Hello <${auth?.email}>!`);
+  return c.text(`Hello ${auth?.sub}!`);
 });
 
 export const googleAuthCallbackApi = createFactory().createHandlers(
