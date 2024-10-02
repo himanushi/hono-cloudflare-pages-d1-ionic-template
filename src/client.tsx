@@ -1,16 +1,24 @@
+import "@ionic/react/css/core.css";
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
+import "@ionic/react/css/palettes/dark.always.css";
+
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import {
-  ColorModeScript,
-  ThemeSchemeScript,
-  UIProvider,
-  defaultConfig,
-} from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { createPreferencesPersister } from "~/utils/createPreferencesPersister";
-import { clientRoutes } from "./clientRoutes";
+import { HomeLayout } from "./pages/home/HomeLayout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,23 +28,24 @@ const queryClient = new QueryClient({
   },
 });
 
+setupIonicReact({
+  mode: "ios",
+});
+
 const App = () => {
   return (
     <PersistQueryClientProvider
       client={queryClient}
       persistOptions={{ persister: createPreferencesPersister() }}
     >
-      <ColorModeScript
-        type="cookie"
-        initialColorMode={defaultConfig.initialColorMode}
-      />
-      <ThemeSchemeScript
-        type="cookie"
-        initialThemeScheme={defaultConfig.initialThemeScheme}
-      />
-      <UIProvider>
-        <RouterProvider router={clientRoutes} />
-      </UIProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route path="/home" component={HomeLayout} exact={true} />
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
     </PersistQueryClientProvider>
   );
 };
