@@ -34,8 +34,8 @@ export const Users = () => {
     <Flex flexDirection="column">
       {users.map((user) => (
         <Box key={user.id}>
-          {user.name}
           {user.id}
+          {user.name}
         </Box>
       ))}
       <Button

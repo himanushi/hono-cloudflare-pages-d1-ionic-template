@@ -18,7 +18,10 @@ export const getUsersApi = createFactory().createHandlers(
 
     const db = drizzle(c.env.DB);
     const result = await db
-      .select()
+      .select({
+        id: users.id,
+        name: users.name,
+      })
       .from(users)
       .limit(limit)
       .offset(offset)
