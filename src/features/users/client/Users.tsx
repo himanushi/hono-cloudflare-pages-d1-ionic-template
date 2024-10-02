@@ -1,5 +1,5 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, Button, Flex } from "@yamada-ui/react";
+import { IonButton, IonItem, IonLabel, IonList } from "@ionic/react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import type { UsersAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
@@ -28,35 +28,28 @@ export const Users = () => {
 
   const users = (data ?? { pages: [] }).pages.flat();
 
-  const client = useQueryClient();
-
   return (
-    <Flex flexDirection="column">
+    <IonList>
+      <IonItem>
+        <IonLabel>
+          本当にすばらしい旅だった。多くの愛すべき人々と出会ったが、彼らと再び会うことはないだろう。一生は短く、誰もがリダウトの安全と繁栄のために尽力しなければならない。それでも、訪れたすべての都市でたくさん旅をした。多くの人々がいたが、時間が足りなかった。
+        </IonLabel>
+      </IonItem>
       {users.map((user) => (
-        <Box key={user.id}>
+        <IonItem key={user.id}>
           {user.id}
           {user.name}
-        </Box>
+        </IonItem>
       ))}
-      <Button
-        onClick={async () => {
-          await query.api.users.$post({
-            json: { name: "test" },
-          });
-          client.resetQueries({
-            queryKey: ["users"],
-          });
-        }}
-      >
-        Users
-      </Button>
-      <Button
-        onClick={() => {
-          fetchNextPage();
-        }}
-      >
-        Next
-      </Button>
-    </Flex>
+      <IonItem>
+        <IonButton
+          onClick={() => {
+            fetchNextPage();
+          }}
+        >
+          Next
+        </IonButton>
+      </IonItem>
+    </IonList>
   );
 };

@@ -6,6 +6,10 @@ export const serverApi = createFactory().createHandlers((c) => {
     renderToString(
       <html lang="en">
         <head>
+          <link
+            href="https://fonts.googleapis.com/css?family=Noto+Sans+JP"
+            rel="stylesheet"
+          />
           <link href="/static/style.css" rel="stylesheet" />
           {import.meta.env.PROD ? (
             <script type="module" src="/static/client.js" />

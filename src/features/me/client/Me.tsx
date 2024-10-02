@@ -1,5 +1,5 @@
+import { IonButton, IonItem, IonLabel } from "@ionic/react";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Flex } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import type { MeAPI } from "~/serverRoutes";
 import { clientUrl } from "~/utils/clientUrl";
@@ -14,15 +14,15 @@ export const Me = () => {
   });
 
   return (
-    <Flex flexDirection="column">
-      <div>{me?.name}</div>
-      <Button
+    <IonItem>
+      <IonLabel>{me?.name}</IonLabel>
+      <IonButton
         onClick={() => {
           window.open("/auth/login", "_blank");
         }}
       >
         google login
-      </Button>
-    </Flex>
+      </IonButton>
+    </IonItem>
   );
 };
