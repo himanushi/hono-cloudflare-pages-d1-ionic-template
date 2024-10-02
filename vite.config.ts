@@ -35,13 +35,13 @@ export default defineConfig(({ mode }) => {
     ssr: {
       external: [
         "@capacitor/preferences",
-        "@fortawesome/free-solid-svg-icons",
-        "@yamada-ui/fontawesome",
-        "@yamada-ui/react",
         "react",
         "react-dom",
         "react-router-dom",
-        "swr",
+        "@ionic/react",
+        "@ionic/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-query-persist-client",
       ],
     },
     plugins: [
