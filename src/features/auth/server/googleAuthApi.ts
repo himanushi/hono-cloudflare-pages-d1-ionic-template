@@ -13,7 +13,7 @@ export const googleAuthLoginApi = createFactory().createHandlers(
     const sub = auth?.sub;
 
     if (typeof sub !== "string") {
-      return c.text("No sub found", 400);
+      return c.redirect("/");
     }
 
     const db = drizzle(c.env.DB);
@@ -37,7 +37,7 @@ export const googleAuthLoginApi = createFactory().createHandlers(
       sameSite: "lax",
     });
 
-    return c.text(`Hello ${auth?.sub}!`);
+    return c.redirect("/");
   },
 );
 

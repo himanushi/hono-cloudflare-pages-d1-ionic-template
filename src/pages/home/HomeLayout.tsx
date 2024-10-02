@@ -1,9 +1,12 @@
-import { VStack } from "@yamada-ui/react";
+import { HStack, Text, VStack } from "@yamada-ui/react";
 import { Me } from "~/features/me/client/Me";
 import { Users } from "~/features/users/client/Users";
 
 export const HomeLayout = () => (
-  <VStack gap={1}>
+  <VStack>
+    <HStack as="header">
+      <Text as="h1">aaaa</Text>
+    </HStack>
     <Me />
     <Users />
   </VStack>
