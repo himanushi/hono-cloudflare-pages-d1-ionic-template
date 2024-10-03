@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
-import { HomeLayout } from "./pages/home/HomeLayout";
+import { IonRouterOutlet } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import { Redirect, Route } from "react-router-dom";
+import { HomeLayout } from "~/pages/home/HomeLayout";
 
-export const clientRoutes = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomeLayout />,
-  },
-  {
-    path: "/auth/callback",
-    element: <HomeLayout />,
-  },
-]);
+export const clientRoutes = (
+  <IonReactRouter>
+    <IonRouterOutlet>
+      <Route path="/home" component={HomeLayout} exact={true} />
+      <Route exact path="/" render={() => <Redirect to="/home" />} />
+    </IonRouterOutlet>
+  </IonReactRouter>
+);

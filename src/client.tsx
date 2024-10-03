@@ -10,15 +10,13 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import "@ionic/react/css/palettes/dark.always.css";
 
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
+import { IonApp, setupIonicReact } from "@ionic/react";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Redirect, Route } from "react-router-dom";
 import { createPreferencesPersister } from "~/utils/createPreferencesPersister";
-import { HomeLayout } from "./pages/home/HomeLayout";
+import { clientRoutes } from "./clientRoutes";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,14 +36,7 @@ const App = () => {
       client={queryClient}
       persistOptions={{ persister: createPreferencesPersister() }}
     >
-      <IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route path="/home" component={HomeLayout} exact={true} />
-            <Route exact path="/" render={() => <Redirect to="/home" />} />
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
+      <IonApp>{clientRoutes}</IonApp>
     </PersistQueryClientProvider>
   );
 };
