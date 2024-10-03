@@ -7,9 +7,9 @@ export const fetcher =
       args: ARGS,
       options?: ClientRequestOptions,
     ) => Promise<ClientResponse<RESPONSE>>,
-    arg: InferRequestType<typeof api>,
+    arg?: InferRequestType<typeof api>,
   ) =>
   async () => {
-    const res = await api(arg);
+    const res = await api(arg ? arg : ({} as ARGS));
     return (await res.json()) as RESPONSE;
   };
