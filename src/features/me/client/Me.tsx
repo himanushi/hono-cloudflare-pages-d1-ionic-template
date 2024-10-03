@@ -18,7 +18,7 @@ export const Me = () => {
       <IonLabel>{me?.name}</IonLabel>
       <IonButton
         onClick={() => {
-          window.open("/auth/login", "_blank");
+          window.open("/auth/login", "_self");
         }}
       >
         google login
