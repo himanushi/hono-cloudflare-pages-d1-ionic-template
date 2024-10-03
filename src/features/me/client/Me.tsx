@@ -45,7 +45,7 @@ export const Me = () => {
             await client.api.me.$patch({
               json: { name },
             });
-            refetch();
+            await refetch();
           }}
         >
           保存

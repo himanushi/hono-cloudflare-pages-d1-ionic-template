@@ -1,28 +1,26 @@
 import {
   IonContent,
   IonHeader,
-  IonItem,
-  IonLabel,
+  IonItemDivider,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { Me } from "~/features/me/client/Me";
-import { Users } from "~/features/users/client/Users";
+import { Todo } from "~/features/todo/client/Todo";
 
 export const HomeLayout = () => (
   <IonPage>
     <IonHeader>
       <IonToolbar>
-        <IonTitle>Home</IonTitle>
+        <IonTitle>Hono Todo</IonTitle>
       </IonToolbar>
     </IonHeader>
     <IonContent>
-      <IonItem>
-        <IonLabel>アプリ名</IonLabel>
-      </IonItem>
+      <IonItemDivider>User Setting</IonItemDivider>
       <Me />
-      <Users />
+      <IonItemDivider>Todo</IonItemDivider>
+      <Todo />
     </IonContent>
   </IonPage>
 );

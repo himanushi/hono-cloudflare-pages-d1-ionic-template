@@ -7,11 +7,10 @@ import { fetcher } from "~/utils/fetcher";
 export const client = hc<MeAPI>(clientUrl);
 
 export const useMe = () => {
-  const { data: me } = useQuery({
+  const { data: me, refetch } = useQuery({
     queryKey: ["me"],
     queryFn: fetcher(client.api.me.$get),
-    refetchOnReconnect: true,
   });
 
-  return { me };
+  return { me, refetch };
 };
