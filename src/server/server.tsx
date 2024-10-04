@@ -1,7 +1,7 @@
 import { createFactory } from "hono/factory";
 import { renderToString } from "react-dom/server";
 
-export const serverApi = createFactory().createHandlers((c) => {
+export const server = createFactory().createHandlers((c) => {
   return c.html(
     renderToString(
       <html lang="en">
@@ -14,7 +14,7 @@ export const serverApi = createFactory().createHandlers((c) => {
           {import.meta.env.PROD ? (
             <script type="module" src="/static/client.js" />
           ) : (
-            <script type="module" src="/src/client.tsx" />
+            <script type="module" src="/src/client/client.tsx" />
           )}
         </head>
         <body>

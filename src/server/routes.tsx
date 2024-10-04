@@ -5,14 +5,10 @@ import {
   googleAuthCallbackApi,
   googleAuthLoginApi,
   googleAuthLogoutApi,
-} from "~/features/auth/server/googleAuthApi";
-import { getMeApi, patchMeApi } from "~/features/me/server/meApi";
-import {
-  getTodoApi,
-  patchTodoApi,
-  postTodoApi,
-} from "~/features/todo/server/todoApi";
-import { serverApi } from "~/server";
+} from "./api/googleAuthApi";
+import { getMeApi, patchMeApi } from "./api/meApi";
+import { getTodoApi, patchTodoApi, postTodoApi } from "./api/todoApi";
+import { server } from "./server";
 
 export type Bindings = {
   DB: D1Database;
@@ -38,6 +34,6 @@ export type TodoAPI = typeof _todoApi;
 const _meApi = app.get("/api/me", ...getMeApi).patch("/api/me", ...patchMeApi);
 export type MeAPI = typeof _meApi;
 
-app.get("*", ...serverApi);
+app.get("*", ...server);
 
 export { app };

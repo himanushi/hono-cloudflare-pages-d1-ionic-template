@@ -1,9 +1,9 @@
 import { IonButton, IonInput, IonItem, IonLabel, IonList } from "@ionic/react";
 import { hc } from "hono/client";
 import { useEffect, useState } from "react";
-import { useMe } from "~/hooks/useMe";
-import type { MeAPI } from "~/serverRoutes";
-import { clientUrl } from "~/utils/clientUrl";
+import { useMe } from "~/client/hooks/useMe";
+import { clientUrl } from "~/client/utils/clientUrl";
+import type { MeAPI } from "~/server/routes";
 
 export const client = hc<MeAPI>(clientUrl);
 

@@ -5,7 +5,7 @@ import type { Context } from "hono";
 import { setSignedCookie } from "hono/cookie";
 import { createFactory } from "hono/factory";
 import { users } from "~/schema";
-import type { Bindings } from "~/serverRoutes";
+import type { Bindings } from "~/server/routes";
 
 export const googleAuthLoginApi = createFactory().createHandlers(
   async (c: Context<{ Bindings: Bindings }>) => {

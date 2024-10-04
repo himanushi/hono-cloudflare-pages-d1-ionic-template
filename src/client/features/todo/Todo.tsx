@@ -1,8 +1,8 @@
 import { IonButton, IonItem, IonList } from "@ionic/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { hc } from "hono/client";
-import type { TodoAPI } from "~/serverRoutes";
-import { clientUrl } from "~/utils/clientUrl";
+import { clientUrl } from "~/client/utils/clientUrl";
+import type { TodoAPI } from "~/server/routes";
 
 const query = hc<TodoAPI>(clientUrl);
 const limit = 10;

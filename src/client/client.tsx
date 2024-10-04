@@ -15,8 +15,8 @@ import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createPreferencesPersister } from "~/utils/createPreferencesPersister";
-import { clientRoutes } from "./clientRoutes";
+import { clientRoutes } from "./routes";
+import { createPreferencesPersister } from "./utils/createPreferencesPersister";
 
 const queryClient = new QueryClient({
   defaultOptions: {

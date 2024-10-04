@@ -6,8 +6,8 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { Me } from "~/features/me/client/Me";
-import { Todo } from "~/features/todo/client/Todo";
+import { Me } from "~/client/features/me/Me";
+import { Todo } from "~/client/features/todo/Todo";
 
 export const HomeLayout = () => (
   <IonPage>
