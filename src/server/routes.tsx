@@ -13,15 +13,15 @@ import { server } from "./server";
 export type Bindings = {
   DB: D1Database;
   COOKIE_SECRET: string;
+  APP_URL: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.use(
-  "*",
+app.use("*", async (c, next) =>
   cors({
-    origin: ["ai-threads.pages.dev"],
-  }),
+    origin: c.env.APP_URL,
+  })(c, next),
 );
 
 app

@@ -1,9 +1,10 @@
-name = "hono-todo"
+name = "${APP_NAME}"
 compatibility_date = "2024-09-16"
 pages_build_output_dir = "./dist"
 compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
+APP_URL = "${APP_URL}"
 COOKIE_SECRET = "${COOKIE_SECRET}"
 OIDC_AUTH_SECRET = "${OIDC_AUTH_SECRET}"
 OIDC_ISSUER = "${OIDC_ISSUER}"
@@ -14,6 +15,6 @@ OIDC_SCOPES = "${OIDC_SCOPES}"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "hono-todo"
+database_name = "${APP_NAME}"
 migrations_dir = "src/server/db/migrations"
 database_id = "${CLOUDFLARE_DATABASE_ID}"
