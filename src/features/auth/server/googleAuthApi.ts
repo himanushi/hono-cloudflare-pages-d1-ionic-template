@@ -35,6 +35,7 @@ export const googleAuthLoginApi = createFactory().createHandlers(
       httpOnly: true,
       secure: true,
       sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
     });
 
     return c.redirect("/");
