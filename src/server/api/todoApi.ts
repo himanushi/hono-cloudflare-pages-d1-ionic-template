@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
@@ -15,8 +15,13 @@ export const getTodoApi = createFactory().createHandlers(
     }),
   ),
   async (c) => {
-    const { limit, offset } = c.req.valid("query");
+    const me = await getMe(c);
 
+    if (!me) {
+      return c.json([]);
+    }
+
+    const { limit, offset } = c.req.valid("query");
     const results = await drizzle(c.env.DB)
       .select({
         id: todo.id,
@@ -25,6 +30,7 @@ export const getTodoApi = createFactory().createHandlers(
         status: todo.status,
       })
       .from(todo)
+      .where(and(eq(todo.userId, me.id), eq(todo.status, "pending")))
       .limit(limit)
       .offset(offset)
       .all();

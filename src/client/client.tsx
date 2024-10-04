@@ -8,7 +8,6 @@ import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-import "@ionic/react/css/palettes/dark.always.css";
 
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { QueryClient } from "@tanstack/react-query";
