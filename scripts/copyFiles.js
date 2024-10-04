@@ -21,7 +21,6 @@ const excludeFiles = [
   "favicon.ico",
   ".gitignore",
   "tsconfig.json",
-  "scripts",
   "vite.config.ts",
   "vite-env.d.ts",
   "tsconfig.node.json",
