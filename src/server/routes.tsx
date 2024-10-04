@@ -17,7 +17,12 @@ export type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.use("*", cors());
+app.use(
+  "*",
+  cors({
+    origin: ["ai-threads.pages.dev"],
+  }),
+);
 
 app
   .use("/auth/login", oidcAuthMiddleware())
