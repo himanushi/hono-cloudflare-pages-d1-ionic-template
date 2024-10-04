@@ -15,5 +15,5 @@ OIDC_SCOPES = "${OIDC_SCOPES}"
 [[d1_databases]]
 binding = "DB"
 database_name = "ai-threads"
-migrations_dir = "drizzle/migrations"
+migrations_dir = "src/server/db/migrations"
 database_id = "${CLOUDFLARE_DATABASE_ID}"

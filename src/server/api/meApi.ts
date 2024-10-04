@@ -3,8 +3,8 @@ import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { users } from "~/schema";
 import { getMe } from "~/server/utils/getMe";
+import { users } from "../db/schema";
 
 export const getMeApi = createFactory().createHandlers(async (c) => {
   const user = await getMe(c);
@@ -22,16 +22,13 @@ export const patchMeApi = createFactory().createHandlers(
     const user = await getMe(c);
     if (!user) return c.notFound();
 
-    const db = drizzle(c.env.DB);
-    const result = await db
+    await drizzle(c.env.DB)
       .update(users)
       .set({
         name: c.req.valid("json").name,
       })
       .where(eq(users.id, Number(user.id)))
       .returning({ updatedUserId: users.id });
-
-    console.log(result);
 
     return c.text("ok");
   },

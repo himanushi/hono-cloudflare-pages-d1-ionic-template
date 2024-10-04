@@ -4,8 +4,8 @@ import { drizzle } from "drizzle-orm/d1";
 import type { Context } from "hono";
 import { setSignedCookie } from "hono/cookie";
 import { createFactory } from "hono/factory";
-import { users } from "~/schema";
 import type { Bindings } from "~/server/routes";
+import { users } from "../db/schema";
 
 export const googleAuthLoginApi = createFactory().createHandlers(
   async (c: Context<{ Bindings: Bindings }>) => {

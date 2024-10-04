@@ -3,8 +3,8 @@ import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { todo } from "~/schema";
 import { getMe } from "~/server/utils/getMe";
+import { todo } from "../db/schema";
 
 export const getTodoApi = createFactory().createHandlers(
   zValidator(
