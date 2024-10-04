@@ -1,6 +1,19 @@
-import { IonButton, IonItem, IonList } from "@ionic/react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+// src/client/features/todo/Todo.tsx
+import {
+  IonButton,
+  IonCheckbox,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+} from "@ionic/react";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { hc } from "hono/client";
+import { useState } from "react";
 import { clientUrl } from "~/client/utils/clientUrl";
 import type { TodoAPI } from "~/server/routes";
 
@@ -8,6 +21,10 @@ const query = hc<TodoAPI>(clientUrl);
 const limit = 10;
 
 export const Todo = () => {
+  const queryClient = useQueryClient();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ["todo"],
     queryFn: ({ pageParam }) =>
@@ -26,14 +43,94 @@ export const Todo = () => {
         : { offset: lastPageParam.offset + limit, limit },
   });
 
+  const addTodoMutation = useMutation({
+    mutationFn: ({
+      title,
+      description,
+    }: { title: string; description?: string }) =>
+      query.api.todo.$post({
+        json: { title, description: description ?? null },
+      }),
+    onSuccess: () => {
+      queryClient.resetQueries({ queryKey: ["todo"] });
+      setTitle("");
+      setDescription("");
+    },
+  });
+
+  const updateTodoMutation = useMutation({
+    mutationFn: ({
+      id,
+      completed,
+      title,
+      description,
+    }: {
+      id: number;
+      completed: boolean;
+      title: string;
+      description: string | null;
+    }) =>
+      query.api.todo.$patch({
+        json: {
+          id,
+          status: completed ? "completed" : "active",
+          title: title,
+          description: description,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todo"] });
+    },
+  });
+
   const todo = (data ?? { pages: [] }).pages.flat();
 
   return (
     <IonList>
+      <IonItem>
+        <IonInput
+          label="タイトル"
+          placeholder="To-Do タイトル"
+          value={title}
+          onIonChange={(e) => setTitle(e.detail.value ?? "")}
+        />
+      </IonItem>
+      <IonItem>
+        <IonInput
+          label="説明"
+          placeholder="To-Do 説明"
+          value={description}
+          onIonChange={(e) => setDescription(e.detail.value ?? "")}
+        />
+      </IonItem>
+      <IonItem>
+        <IonButton
+          onClick={() => {
+            if (title.trim()) {
+              addTodoMutation.mutate({ title, description });
+            }
+          }}
+        >
+          To-Do 追加
+        </IonButton>
+      </IonItem>
       {todo.map((td) => (
         <IonItem key={td.id}>
-          {td.id}
-          {td.title}
+          <IonCheckbox
+            slot="start"
+            checked={td.status === "completed"}
+            onIonChange={(e) =>
+              updateTodoMutation.mutate({
+                id: td.id,
+                completed: e.detail.checked,
+                title: td.title,
+                description: td.description,
+              })
+            }
+          />
+          <IonLabel>
+            {td.id}: {td.title}
+          </IonLabel>
         </IonItem>
       ))}
       <IonItem>

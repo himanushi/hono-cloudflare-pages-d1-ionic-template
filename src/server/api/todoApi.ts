@@ -27,7 +27,6 @@ export const getTodoApi = createFactory().createHandlers(
       .from(todo)
       .limit(limit)
       .offset(offset)
-      .orderBy(desc(todo.id))
       .all();
 
     return c.json(results);
