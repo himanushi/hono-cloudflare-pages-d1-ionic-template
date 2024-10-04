@@ -1,15 +1,15 @@
 {
-  "name": "ai-threads",
+  "name": "hono-todo",
   "type": "module",
   "scripts": {
     "ai": "node ./scripts/copyFiles.js",
     "dev": "concurrently \"node ./scripts/generateWranglerToml.js\" \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio\"",
     "build": "node ./scripts/prodGenerateWranglerToml.js && vite build --mode client && vite build",
-    "deploy": "$npm_execpath run build && wrangler pages deploy && wrangler d1 migrations apply ai-threads --remote",
-    "db:create:prod": "wrangler d1 create ai-threads",
+    "deploy": "$npm_execpath run build && wrangler pages deploy && wrangler d1 migrations apply hono-todo --remote",
+    "db:create:prod": "wrangler d1 create hono-todo",
     "db:generate": "drizzle-kit generate",
-    "db:apply": "wrangler d1 migrations apply ai-threads --local",
-    "db:apply:prod": "wrangler d1 migrations apply ai-threads --remote",
+    "db:apply": "wrangler d1 migrations apply hono-todo --local",
+    "db:apply:prod": "wrangler d1 migrations apply hono-todo --remote",
     "db:studio:prod": "drizzle-kit studio"
   },
   "dependencies": {
