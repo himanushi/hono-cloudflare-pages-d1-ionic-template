@@ -1,5 +1,5 @@
 const description =
-  "hono, CloudFlare Pages & D1, drizzle, swr, react, yamada-ui を使用したアプリを開発しています。";
+  "hono, CloudFlare Pages & D1, drizzle, react を使用したアプリを開発しています。";
 
 import fs from "node:fs";
 import path from "node:path";
@@ -19,7 +19,6 @@ const excludeFiles = [
   "Thumbs.db",
   "package-lock.json",
   "favicon.ico",
-  ".gitignore",
   "tsconfig.json",
   "vite.config.ts",
   "vite-env.d.ts",
