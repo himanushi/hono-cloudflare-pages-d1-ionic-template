@@ -12,12 +12,8 @@ export const Me = () => {
   const [name, setName] = useState("");
 
   useEffect(() => {
-    if (me?.name) {
-      setName(me.name);
-    } else {
-      refetch();
-    }
-  }, [me?.name, refetch]);
+    setName(me?.name ?? "");
+  }, [me]);
 
   return (
     <IonList>
