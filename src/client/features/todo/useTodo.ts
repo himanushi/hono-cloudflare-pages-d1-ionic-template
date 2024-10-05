@@ -54,9 +54,9 @@ export const useTodo = () => {
       completed: boolean;
       title: string;
     }) =>
-      query.api.todo.$patch({
+      query.api.todo[":id"].$patch({
+        param: { id: id.toString() },
         json: {
-          id,
           status: completed ? "completed" : "active",
           title: title,
         },

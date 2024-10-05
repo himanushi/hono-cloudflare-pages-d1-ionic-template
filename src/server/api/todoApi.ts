@@ -65,17 +65,23 @@ export const postTodoApi = createFactory().createHandlers(
 
 export const patchTodoApi = createFactory().createHandlers(
   zValidator(
+    "param",
+    z.object({
+      id: z.string().transform((v) => Number.parseInt(v, 10)),
+    }),
+  ),
+  zValidator(
     "json",
     z.object({
-      id: z.number(),
       title: z.string(),
       status: z.string(),
     }),
   ),
   async (c) => {
-    const { id, title, status } = c.req.valid("json");
-    const me = await getMe(c);
+    const { id } = c.req.valid("param");
+    const { title, status } = c.req.valid("json");
 
+    const me = await getMe(c);
     if (!me) {
       return c.notFound();
     }
