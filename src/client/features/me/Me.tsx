@@ -22,7 +22,7 @@ export const Me = () => {
   return (
     <IonList>
       <IonItem>
-        <IonLabel>{me?.name ?? "未ログイン"}</IonLabel>
+        <IonLabel>{me ? "ログイン済" : "未ログイン"}</IonLabel>
       </IonItem>
       <IonItem>
         <IonButton
@@ -59,7 +59,7 @@ export const Me = () => {
             await refetch();
           }}
         >
-          保存
+          名前変更
         </IonButton>
       </IonItem>
     </IonList>
