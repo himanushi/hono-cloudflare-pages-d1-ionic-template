@@ -49,7 +49,6 @@ export const Todo = () => {
               updateTodoMutation.mutate({
                 id: td.id,
                 completed: e.detail.checked,
-                title: td.title,
               })
             }
           />

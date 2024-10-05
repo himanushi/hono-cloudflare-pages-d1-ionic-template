@@ -48,17 +48,14 @@ export const useTodo = () => {
     mutationFn: ({
       id,
       completed,
-      title,
     }: {
       id: number;
       completed: boolean;
-      title: string;
     }) =>
       query.api.todo[":id"].$patch({
         param: { id: id.toString() },
         json: {
-          status: completed ? "completed" : "active",
-          title: title,
+          status: completed ? "completed" : "pending",
         },
       }),
     onSuccess: () => {

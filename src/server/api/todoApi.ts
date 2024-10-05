@@ -73,13 +73,12 @@ export const patchTodoApi = createFactory().createHandlers(
   zValidator(
     "json",
     z.object({
-      title: z.string(),
       status: z.string(),
     }),
   ),
   async (c) => {
     const { id } = c.req.valid("param");
-    const { title, status } = c.req.valid("json");
+    const { status } = c.req.valid("json");
 
     const me = await getMe(c);
     if (!me) {
@@ -88,7 +87,7 @@ export const patchTodoApi = createFactory().createHandlers(
 
     await drizzle(c.env.DB)
       .update(todo)
-      .set({ title, status, userId: me.id })
+      .set({ status, userId: me.id })
       .where(and(eq(todo.id, id), eq(todo.userId, me.id)))
       .execute();
 
