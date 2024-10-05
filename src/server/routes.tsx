@@ -2,6 +2,7 @@ import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
+import { secureHeaders } from "hono/secure-headers";
 import {
   googleAuthCallbackApi,
   googleAuthLoginApi,
@@ -30,6 +31,8 @@ app.use("*", async (c, next) =>
     origin: [c.env.APP_URL],
   })(c, next),
 );
+
+app.use("*", secureHeaders());
 
 app
   .use("/auth/login", oidcAuthMiddleware())

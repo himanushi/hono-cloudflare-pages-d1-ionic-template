@@ -26,7 +26,6 @@ export const getTodoApi = createFactory().createHandlers(
       .select({
         id: todo.id,
         title: todo.title,
-        description: todo.description,
         status: todo.status,
       })
       .from(todo)
