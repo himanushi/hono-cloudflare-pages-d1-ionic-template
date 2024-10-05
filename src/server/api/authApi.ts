@@ -1,13 +1,19 @@
-import { getAuth, processOAuthCallback, revokeSession } from "@hono/oidc-auth";
+import {
+  getAuth,
+  oidcAuthMiddleware,
+  processOAuthCallback,
+  revokeSession,
+} from "@hono/oidc-auth";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import type { Context } from "hono";
-import { setSignedCookie } from "hono/cookie";
+import { deleteCookie, setSignedCookie } from "hono/cookie";
 import { createFactory } from "hono/factory";
-import type { Bindings } from "~/server/routes";
 import { users } from "../db/schema";
+import type { Bindings } from "../utils/createApp";
 
-export const googleAuthLoginApi = createFactory().createHandlers(
+export const authLoginApi = createFactory().createHandlers(
+  oidcAuthMiddleware(),
   async (c: Context<{ Bindings: Bindings }>) => {
     const auth = await getAuth(c);
     const sub = auth?.sub;
@@ -56,10 +62,12 @@ export const googleAuthLoginApi = createFactory().createHandlers(
   },
 );
 
-export const googleAuthCallbackApi = createFactory().createHandlers(
+export const authCallbackApi = createFactory().createHandlers(
   async (c) => await processOAuthCallback(c),
 );
 
-export const googleAuthLogoutApi = createFactory().createHandlers(
-  async (c) => await revokeSession(c),
-);
+export const authLogoutApi = createFactory().createHandlers(async (c) => {
+  deleteCookie(c, "session");
+  await revokeSession(c);
+  return c.redirect("/");
+});

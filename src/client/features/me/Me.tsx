@@ -30,14 +30,21 @@ export const Me = () => {
             window.open("/auth/login", "_self");
           }}
         >
-          Google Login
+          Login
+        </IonButton>
+        <IonButton
+          onClick={() => {
+            window.open("/auth/logout", "_self");
+          }}
+        >
+          logout
         </IonButton>
       </IonItem>
       <IonItem>
         <IonInput
           label="名前"
           placeholder="名前"
-          value={name}
+          value={me?.name}
           onIonChange={(e) => {
             setName(e.detail.value ?? "");
           }}

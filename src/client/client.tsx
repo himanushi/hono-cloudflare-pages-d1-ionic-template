@@ -10,12 +10,10 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
 import { IonApp, setupIonicReact } from "@ionic/react";
-import { QueryClient } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { clientRoutes } from "./routes";
-import { createPreferencesPersister } from "./utils/createPreferencesPersister";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,12 +29,9 @@ setupIonicReact({
 
 const App = () => {
   return (
-    <PersistQueryClientProvider
-      client={queryClient}
-      persistOptions={{ persister: createPreferencesPersister() }}
-    >
+    <QueryClientProvider client={queryClient}>
       <IonApp>{clientRoutes}</IonApp>
-    </PersistQueryClientProvider>
+    </QueryClientProvider>
   );
 };
 

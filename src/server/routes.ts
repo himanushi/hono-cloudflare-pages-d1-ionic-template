@@ -1,9 +1,4 @@
-import { oidcAuthMiddleware } from "@hono/oidc-auth";
-import {
-  googleAuthCallbackApi,
-  googleAuthLoginApi,
-  googleAuthLogoutApi,
-} from "./api/googleAuthApi";
+import { authCallbackApi, authLoginApi, authLogoutApi } from "./api/authApi";
 import { getMeApi, patchMeApi } from "./api/meApi";
 import { getTodoApi, patchTodoApi, postTodoApi } from "./api/todoApi";
 import { middleware } from "./middleware";
@@ -15,10 +10,9 @@ const app = createApp();
 app.route("/", middleware);
 
 app
-  .use("/auth/login", oidcAuthMiddleware())
-  .get("/auth/login", ...googleAuthLoginApi)
-  .get("/auth/callback", ...googleAuthCallbackApi)
-  .get("/auth/logout", ...googleAuthLogoutApi);
+  .get("/auth/login", ...authLoginApi)
+  .get("/auth/callback", ...authCallbackApi)
+  .get("/auth/logout", ...authLogoutApi);
 
 const _todoApi = app
   .get("/api/todo", ...getTodoApi)
