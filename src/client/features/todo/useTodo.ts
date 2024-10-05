@@ -14,7 +14,6 @@ const limit = 5;
 export const useTodo = () => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["todo"],
@@ -35,17 +34,13 @@ export const useTodo = () => {
   });
 
   const addTodoMutation = useMutation({
-    mutationFn: ({
-      title,
-      description,
-    }: { title: string; description?: string }) =>
+    mutationFn: ({ title }: { title: string }) =>
       query.api.todo.$post({
-        json: { title, description: description ?? null },
+        json: { title },
       }),
     onSuccess: () => {
       queryClient.resetQueries({ queryKey: ["todo"] });
       setTitle("");
-      setDescription("");
     },
   });
 
@@ -54,19 +49,16 @@ export const useTodo = () => {
       id,
       completed,
       title,
-      description,
     }: {
       id: number;
       completed: boolean;
       title: string;
-      description: string | null;
     }) =>
       query.api.todo.$patch({
         json: {
           id,
           status: completed ? "completed" : "active",
           title: title,
-          description: description,
         },
       }),
     onSuccess: () => {
@@ -84,7 +76,5 @@ export const useTodo = () => {
     updateTodoMutation,
     title,
     setTitle,
-    description,
-    setDescription,
   };
 };

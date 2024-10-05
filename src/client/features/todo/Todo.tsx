@@ -17,8 +17,6 @@ export const Todo = () => {
     updateTodoMutation,
     title,
     setTitle,
-    description,
-    setDescription,
   } = useTodo();
 
   return (
@@ -32,18 +30,10 @@ export const Todo = () => {
         />
       </IonItem>
       <IonItem>
-        <IonInput
-          label="説明"
-          placeholder="To-Do 説明"
-          value={description}
-          onIonChange={(e) => setDescription(e.detail.value ?? "")}
-        />
-      </IonItem>
-      <IonItem>
         <IonButton
           onClick={() => {
             if (title.trim()) {
-              addTodoMutation.mutate({ title, description });
+              addTodoMutation.mutate({ title });
             }
           }}
         >
@@ -60,7 +50,6 @@ export const Todo = () => {
                 id: td.id,
                 completed: e.detail.checked,
                 title: td.title,
-                description: td.description,
               })
             }
           />

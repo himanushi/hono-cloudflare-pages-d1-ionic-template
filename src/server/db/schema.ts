@@ -24,7 +24,6 @@ export const todo = sqliteTable(
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     title: text("title").notNull(),
-    description: text("description"),
     status: text("status").default("pending"),
     userId: integer("user_id")
       .references(() => users.id)

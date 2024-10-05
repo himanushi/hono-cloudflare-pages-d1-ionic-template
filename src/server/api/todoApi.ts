@@ -44,11 +44,10 @@ export const postTodoApi = createFactory().createHandlers(
     "json",
     z.object({
       title: z.string(),
-      description: z.string().nullable(),
     }),
   ),
   async (c) => {
-    const { title, description } = c.req.valid("json");
+    const { title } = c.req.valid("json");
     const me = await getMe(c);
 
     if (!me) {
@@ -57,7 +56,7 @@ export const postTodoApi = createFactory().createHandlers(
 
     await drizzle(c.env.DB)
       .insert(todo)
-      .values({ title, description, userId: me.id })
+      .values({ title, userId: me.id })
       .execute();
 
     return c.text("ok");
@@ -70,12 +69,11 @@ export const patchTodoApi = createFactory().createHandlers(
     z.object({
       id: z.number(),
       title: z.string(),
-      description: z.string().nullable(),
       status: z.string(),
     }),
   ),
   async (c) => {
-    const { id, title, description, status } = c.req.valid("json");
+    const { id, title, status } = c.req.valid("json");
     const me = await getMe(c);
 
     if (!me) {
@@ -84,7 +82,7 @@ export const patchTodoApi = createFactory().createHandlers(
 
     await drizzle(c.env.DB)
       .update(todo)
-      .set({ title, description, status, userId: me.id })
+      .set({ title, status, userId: me.id })
       .where(and(eq(todo.id, id), eq(todo.userId, me.id)))
       .execute();
 

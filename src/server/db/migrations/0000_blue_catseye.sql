@@ -1,7 +1,6 @@
 CREATE TABLE `todo` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
-	`description` text,
 	`status` text DEFAULT 'pending',
 	`user_id` integer NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s', 'now')),
