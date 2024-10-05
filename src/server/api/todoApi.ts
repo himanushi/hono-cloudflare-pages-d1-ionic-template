@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
@@ -33,6 +33,7 @@ export const getTodoApi = createFactory().createHandlers(
       .where(and(eq(todo.userId, me.id), eq(todo.status, "pending")))
       .limit(limit)
       .offset(offset)
+      .orderBy(desc(todo.id))
       .all();
 
     return c.json(results);

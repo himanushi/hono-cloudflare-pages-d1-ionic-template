@@ -1,6 +1,7 @@
 import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { csrf } from "hono/csrf";
 import {
   googleAuthCallbackApi,
   googleAuthLoginApi,
@@ -20,7 +21,13 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 app.use("*", async (c, next) =>
   cors({
-    origin: c.env.APP_URL,
+    origin: [c.env.APP_URL],
+  })(c, next),
+);
+
+app.use("*", async (c, next) =>
+  csrf({
+    origin: [c.env.APP_URL],
   })(c, next),
 );
 

@@ -18,14 +18,14 @@ import { clientUrl } from "~/client/utils/clientUrl";
 import type { TodoAPI } from "~/server/routes";
 
 const query = hc<TodoAPI>(clientUrl);
-const limit = 10;
+const limit = 5;
 
 export const Todo = () => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const { data, fetchNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     queryKey: ["todo"],
     queryFn: ({ pageParam }) =>
       query.api.todo
@@ -36,7 +36,7 @@ export const Todo = () => {
           },
         })
         .then((res) => res.json()),
-    initialPageParam: { offset: 0, limit: 10 },
+    initialPageParam: { offset: 0, limit },
     getNextPageParam: (lastPage, _allPages, lastPageParam, _allPageParams) =>
       lastPage.length === 0
         ? undefined
@@ -133,15 +133,17 @@ export const Todo = () => {
           </IonLabel>
         </IonItem>
       ))}
-      <IonItem>
-        <IonButton
-          onClick={() => {
-            fetchNextPage();
-          }}
-        >
-          Next
-        </IonButton>
-      </IonItem>
+      {hasNextPage && (
+        <IonItem>
+          <IonButton
+            onClick={() => {
+              fetchNextPage();
+            }}
+          >
+            Next
+          </IonButton>
+        </IonItem>
+      )}
     </IonList>
   );
 };
