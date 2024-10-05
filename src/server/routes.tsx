@@ -2,6 +2,7 @@ import { oidcAuthMiddleware } from "@hono/oidc-auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
+import { showRoutes } from "hono/dev";
 import { secureHeaders } from "hono/secure-headers";
 import {
   googleAuthCallbackApi,
@@ -50,5 +51,7 @@ const _meApi = app.get("/api/me", ...getMeApi).patch("/api/me", ...patchMeApi);
 export type MeAPI = typeof _meApi;
 
 app.get("*", ...server);
+
+showRoutes(app);
 
 export { app };
