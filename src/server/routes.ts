@@ -10,9 +10,9 @@ const app = createApp();
 app.route("/", middleware);
 
 app
-  .get("/auth/login", ...authLoginApi)
-  .get("/auth/callback", ...authCallbackApi)
-  .get("/auth/logout", ...authLogoutApi);
+  .get("/api/auth/login", ...authLoginApi)
+  .get("/api/auth/callback", ...authCallbackApi)
+  .get("/api/auth/logout", ...authLogoutApi);
 
 const _todoApi = app
   .get("/api/todo", ...getTodoApi)

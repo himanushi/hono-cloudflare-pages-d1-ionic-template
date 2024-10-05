@@ -23,14 +23,14 @@ export const Me = () => {
       <IonItem>
         <IonButton
           onClick={() => {
-            window.open("/auth/login", "_self");
+            window.open("/api/auth/login", "_self");
           }}
         >
           Login
         </IonButton>
         <IonButton
           onClick={() => {
-            window.open("/auth/logout", "_self");
+            window.open("/api/auth/logout", "_self");
           }}
         >
           logout
