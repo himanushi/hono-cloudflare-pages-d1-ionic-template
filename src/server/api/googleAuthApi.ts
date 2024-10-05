@@ -18,7 +18,7 @@ export const googleAuthLoginApi = createFactory().createHandlers(
 
     const db = drizzle(c.env.DB);
 
-    const existingUser = await db
+    let existingUser = await db
       .select()
       .from(users)
       .where(eq(users.googleUserId, sub))
@@ -29,14 +29,28 @@ export const googleAuthLoginApi = createFactory().createHandlers(
         .insert(users)
         .values({ googleUserId: sub, name: "未設定" })
         .execute();
+
+      existingUser = await db
+        .select()
+        .from(users)
+        .where(eq(users.googleUserId, sub))
+        .all();
     }
 
-    await setSignedCookie(c, "session", sub.toString(), c.env.COOKIE_SECRET, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+    const user = existingUser[0];
+
+    await setSignedCookie(
+      c,
+      "session",
+      user.id.toString(),
+      c.env.COOKIE_SECRET,
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      },
+    );
 
     return c.redirect("/");
   },
