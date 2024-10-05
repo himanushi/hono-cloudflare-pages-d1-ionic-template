@@ -86,7 +86,7 @@ export const patchTodoApi = createFactory().createHandlers(
     await drizzle(c.env.DB)
       .update(todo)
       .set({ title, description, status, userId: me.id })
-      .where(eq(todo.id, id))
+      .where(and(eq(todo.id, id), eq(todo.userId, me.id)))
       .execute();
 
     return c.text("ok");

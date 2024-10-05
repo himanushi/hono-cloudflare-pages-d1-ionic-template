@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
+const envFile = process.env.NODE_ENV === "production" ? ".env" : ".env.local";
+dotenv.config({ path: envFile });
 
 const devTomlPath = "wrangler.template.toml";
 let tomlContent = fs.readFileSync(devTomlPath, "utf8");
