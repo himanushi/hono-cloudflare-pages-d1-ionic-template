@@ -24,26 +24,19 @@ export const authLoginApi = createFactory().createHandlers(
 
     const db = drizzle(c.env.DB);
 
-    let existingUser = await db
+    let user = await db
       .select()
       .from(users)
       .where(eq(users.googleUserId, sub))
-      .all();
+      .get();
 
-    if (existingUser.length === 0) {
-      await db
+    if (!user) {
+      user = await db
         .insert(users)
         .values({ googleUserId: sub, name: "未設定" })
-        .execute();
-
-      existingUser = await db
-        .select()
-        .from(users)
-        .where(eq(users.googleUserId, sub))
-        .all();
+        .returning()
+        .get();
     }
-
-    const user = existingUser[0];
 
     await setSignedCookie(
       c,

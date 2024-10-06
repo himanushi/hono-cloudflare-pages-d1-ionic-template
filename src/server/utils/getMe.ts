@@ -19,16 +19,14 @@ export const getMe = async (c: Context<any, any, any>) => {
     maxAge: 60 * 60 * 24 * 7,
   });
 
-  const db = drizzle(c.env.DB);
-  const user = await db
+  const user = await drizzle(c.env.DB)
     .select({
       id: users.id,
       name: users.name,
     })
     .from(users)
     .where(eq(users.id, Number.parseInt(userId, 10)))
-    .limit(1)
-    .all();
+    .get();
 
-  return user[0] ?? null;
+  return user ?? null;
 };

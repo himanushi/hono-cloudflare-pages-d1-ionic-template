@@ -19,12 +19,15 @@ export const users = sqliteTable(
   }),
 );
 
+export const todoStatusEnum = ['pending', 'completed'] as const;
+export type TodoStatus = typeof todoStatusEnum[number];
+
 export const todo = sqliteTable(
   "todo",
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     title: text("title").notNull(),
-    status: text("status").default("pending"),
+    status: text("status").$type<TodoStatus>().default('pending'),
     userId: integer("user_id")
       .references(() => users.id)
       .notNull(),
