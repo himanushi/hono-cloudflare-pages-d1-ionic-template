@@ -3,10 +3,12 @@ import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { getMe } from "~/server/utils/getMe";
+import { getMeMiddleware } from "~/server/utils/getMeMiddleware";
 import { todo, todoStatusEnum } from "../db/schema";
+import type { HonoType } from "../utils/createApp";
 
-export const getTodoApi = createFactory().createHandlers(
+export const getTodoApi = createFactory<HonoType>().createHandlers(
+  getMeMiddleware,
   zValidator(
     "query",
     z.object({
@@ -15,10 +17,9 @@ export const getTodoApi = createFactory().createHandlers(
     }),
   ),
   async (c) => {
-    const me = await getMe(c);
-
+    const me = c.get("me");
     if (!me) {
-      return c.json([]);
+      return c.json({ message: "Unauthorized" }, 401);
     }
 
     const { limit, offset } = c.req.valid("query");
@@ -40,6 +41,7 @@ export const getTodoApi = createFactory().createHandlers(
 );
 
 export const postTodoApi = createFactory().createHandlers(
+  getMeMiddleware,
   zValidator(
     "json",
     z.object({
@@ -47,13 +49,12 @@ export const postTodoApi = createFactory().createHandlers(
     }),
   ),
   async (c) => {
-    const { title } = c.req.valid("json");
-    const me = await getMe(c);
-
+    const me = c.get("me");
     if (!me) {
-      return c.notFound();
+      return c.json({ message: "Unauthorized" }, 401);
     }
 
+    const { title } = c.req.valid("json");
     await drizzle(c.env.DB)
       .insert(todo)
       .values({ title, userId: me.id })
@@ -64,6 +65,7 @@ export const postTodoApi = createFactory().createHandlers(
 );
 
 export const patchTodoApi = createFactory().createHandlers(
+  getMeMiddleware,
   zValidator(
     "param",
     z.object({
@@ -77,14 +79,13 @@ export const patchTodoApi = createFactory().createHandlers(
     }),
   ),
   async (c) => {
-    const { id } = c.req.valid("param");
-    const { status } = c.req.valid("json");
-
-    const me = await getMe(c);
+    const me = c.get("me");
     if (!me) {
-      return c.notFound();
+      return c.json({ message: "Unauthorized" }, 401);
     }
 
+    const { id } = c.req.valid("param");
+    const { status } = c.req.valid("json");
     await drizzle(c.env.DB)
       .update(todo)
       .set({ status, userId: me.id })
