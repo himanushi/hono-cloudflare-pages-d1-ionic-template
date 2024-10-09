@@ -5,6 +5,7 @@
     "ai": "node ./scripts/copyFiles.js",
     "dev": "concurrently \"node ./scripts/generateWranglerToml.js\" \"vite --port 8080\" \"cross-env LOCAL_DB_PATH=$(node ./scripts/findSqliteFile.js) drizzle-kit studio\"",
     "build": "cross-env NODE_ENV=production node ./scripts/generateWranglerToml.js && vite build --mode client && vite build",
+    "test": "vitest",
     "deploy": "$npm_execpath run build && wrangler pages deploy && wrangler d1 migrations apply hono-todo --remote",
     "db:create:prod": "wrangler d1 create hono-todo",
     "db:generate": "drizzle-kit generate",
@@ -46,6 +47,7 @@
     "vite": "^5.4.5",
     "vite-plugin-static-copy": "^1.0.6",
     "vite-tsconfig-paths": "^5.0.1",
+    "vitest": "^2.1.2",
     "wrangler": "^3.57.2"
   },
   "version": "0.0.1"
