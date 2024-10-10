@@ -25,7 +25,9 @@ export const useTodo = () => {
             offset: pageParam.offset.toString(),
           },
         })
-        .then((res) => res.json()),
+        .then((res) =>
+          res.json().then((json) => ("data" in json ? json.data : [])),
+        ),
     initialPageParam: { offset: 0, limit },
     getNextPageParam: (lastPage, _allPages, lastPageParam, _allPageParams) =>
       lastPage.length === 0
