@@ -5,7 +5,7 @@ export const users = sqliteTable(
   "users",
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: text("name"),
+    name: text("name").notNull(),
     googleUserId: text("googleUserId").unique(),
     createdAt: integer("created_at", { mode: "timestamp" }).default(
       sql`(strftime('%s', 'now'))`,
@@ -19,15 +19,15 @@ export const users = sqliteTable(
   }),
 );
 
-export const todoStatusEnum = ['pending', 'completed'] as const;
-export type TodoStatus = typeof todoStatusEnum[number];
+export const todoStatusEnum = ["pending", "completed"] as const;
+export type TodoStatus = (typeof todoStatusEnum)[number];
 
 export const todo = sqliteTable(
   "todo",
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     title: text("title").notNull(),
-    status: text("status").$type<TodoStatus>().default('pending'),
+    status: text("status").$type<TodoStatus>().default("pending"),
     userId: integer("user_id")
       .references(() => users.id)
       .notNull(),

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "88252a5a-bbc2-488a-ba94-e61d45966b76",
+  "id": "1605309f-edd7-43a9-8af9-f370fc8c538f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "todo": {
@@ -101,7 +101,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "googleUserId": {
