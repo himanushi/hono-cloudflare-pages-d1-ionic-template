@@ -1,18 +1,19 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
-import type { MiddlewareHandler } from "hono";
 import { getSignedCookie } from "hono/cookie";
+import { createMiddleware } from "hono/factory";
 import { users } from "../db/schema";
+import type { HonoType } from "./createApp";
 
-export const getMeMiddleware: MiddlewareHandler = async (c, next) => {
+export const getMeMiddleware = createMiddleware<HonoType>(async (c, next) => {
   const userId = await getSignedCookie(c, c.env.COOKIE_SECRET, "session");
 
   if (!userId) {
-    return c.json({ message: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, 401);
   }
 
   const db = drizzle(c.env.DB);
-  const user = await db
+  const me = await db
     .select({
       id: users.id,
       name: users.name,
@@ -21,10 +22,10 @@ export const getMeMiddleware: MiddlewareHandler = async (c, next) => {
     .where(eq(users.id, Number(userId)))
     .get();
 
-  if (!user) {
-    return c.json({ message: "User not found" }, 404);
+  if (!me) {
+    return c.json({ error: "User not found" }, 404);
   }
 
-  c.set("user", user);
+  c.set("me", me);
   await next();
-};
+});
