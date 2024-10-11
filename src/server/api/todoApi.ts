@@ -19,7 +19,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
   async (c) => {
     const me = c.get("me");
     if (!me) {
-      return c.json({ message: "Unauthorized" }, 401);
+      return c.json({ error: "Unauthorized" }, 401);
     }
 
     const { limit, offset } = c.req.valid("query");
@@ -36,7 +36,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
       .orderBy(desc(todo.id))
       .all();
 
-    return c.json(results);
+    return c.json({ data: results });
   },
 );
 
@@ -60,7 +60,7 @@ export const postTodoApi = createFactory().createHandlers(
       .values({ title, userId: me.id })
       .execute();
 
-    return c.text("ok");
+    return c.json({ data: "ok" });
   },
 );
 
@@ -92,6 +92,6 @@ export const patchTodoApi = createFactory().createHandlers(
       .where(and(eq(todo.id, id), eq(todo.userId, me.id)))
       .execute();
 
-    return c.text("ok");
+    return c.json({ data: "ok" });
   },
 );
