@@ -1,11 +1,11 @@
+import { defineWorkersConfig } from "@cloudflare/vitest-pool-workers/config";
 import pages from "@hono/vite-cloudflare-pages";
 import devServer from "@hono/vite-dev-server";
 import adapter from "@hono/vite-dev-server/cloudflare";
-import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig(({ mode }) => {
+export default defineWorkersConfig(({ mode }) => {
   if (mode === "client") {
     return {
       build: {
@@ -52,5 +52,11 @@ export default defineConfig(({ mode }) => {
       }),
       tsconfigPaths(),
     ],
+    poolOptions: {
+      workers: {
+        miniflare: {},
+        wrangler: { configPath: "./wrangler.toml" },
+      },
+    },
   };
 });
