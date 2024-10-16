@@ -27,5 +27,6 @@ export const getMeMiddleware = createMiddleware<HonoType>(async (c, next) => {
   }
 
   c.set("me", me);
+
   await next();
 });
