@@ -25,8 +25,6 @@ export const getMeMiddleware = createMiddleware<HonoType>(async (c, next) => {
   if (!me) {
     return c.json({ error: "User not found" }, 404);
   }
-
   c.set("me", me);
-
   await next();
 });
