@@ -44,6 +44,16 @@ export default defineWorkersConfig(({ mode }) => {
         "@tanstack/react-query-persist-client",
       ],
     },
+    test: {
+      poolOptions: {
+        workers: {
+          miniflare: {
+            compatibilityFlags: ["nodejs_compat"],
+            compatibilityDate: "2022-10-31",
+          },
+        },
+      },
+    },
     plugins: [
       pages(),
       devServer({
