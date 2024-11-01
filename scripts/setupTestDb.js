@@ -1,9 +1,6 @@
-// scripts/setupTestDb.js
-
-import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
 
 const dbFilePath = path.resolve(
   ".wrangler",
@@ -13,31 +10,32 @@ const dbFilePath = path.resolve(
   "test-db.sqlite",
 );
 
-// データベースの初期化
+// テスト用データベースの初期化
 function initializeDb() {
-  // データベースファイルが存在する場合は削除
+  // 既存のテスト用データベースファイルがあれば削除
   if (fs.existsSync(dbFilePath)) {
     fs.unlinkSync(dbFilePath);
   }
 
   // 新しいデータベースの作成
-  const db = new sqlite3.Database(dbFilePath);
+  const db = new Database(dbFilePath);
 
-  // スキーマとマイグレーションの適用
+  // マイグレーションの適用
   const migrationsPath = path.resolve("src", "server", "db", "migrations");
-  const files = fs.readdirSync(migrationsPath);
-  for (const file of files) {
-    const sql = fs.readFileSync(path.join(migrationsPath, file), "utf8");
-    db.exec(sql, (err) => {
-      if (err) {
-        console.error("マイグレーションの適用中にエラーが発生しました:", err);
-      }
-    });
-  }
+  fs.readdirSync(migrationsPath).forEach((file) => {
+    const filePath = path.join(migrationsPath, file);
+    const stat = fs.statSync(filePath);
+
+    if (stat.isFile()) {
+      const sql = fs.readFileSync(filePath, "utf8");
+      db.exec(sql);
+    }
+  });
 
   db.close();
   console.log("テスト用データベースが初期化されました:", dbFilePath);
 }
 
+// データベースの初期化を実行
 initializeDb();
 export default dbFilePath;
