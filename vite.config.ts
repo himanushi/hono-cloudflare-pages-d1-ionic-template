@@ -1,11 +1,15 @@
-import { defineWorkersConfig } from "@cloudflare/vitest-pool-workers/config";
+import path from "node:path";
+import {
+  defineWorkersConfig,
+  readD1Migrations,
+} from "@cloudflare/vitest-pool-workers/config";
 import pages from "@hono/vite-cloudflare-pages";
 import devServer from "@hono/vite-dev-server";
 import adapter from "@hono/vite-dev-server/cloudflare";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineWorkersConfig(({ mode }) => {
+export default defineWorkersConfig(async ({ mode }) => {
   if (mode === "client") {
     return {
       build: {
@@ -31,6 +35,15 @@ export default defineWorkersConfig(({ mode }) => {
     };
   }
 
+  const migrationsPath = path.join(
+    __dirname,
+    "src",
+    "server",
+    "db",
+    "migrations",
+  );
+  const migrations = await readD1Migrations(migrationsPath);
+
   return {
     ssr: {
       external: [
@@ -45,11 +58,16 @@ export default defineWorkersConfig(({ mode }) => {
       ],
     },
     test: {
+      setupFiles: ["./test/apply-migrations.ts"],
       poolOptions: {
         workers: {
+          singleWorker: true,
+          wrangler: {
+            configPath: "./wrangler.toml",
+            environment: "production",
+          },
           miniflare: {
-            compatibilityFlags: ["nodejs_compat"],
-            compatibilityDate: "2022-10-31",
+            bindings: { TEST_MIGRATIONS: migrations },
           },
         },
       },
