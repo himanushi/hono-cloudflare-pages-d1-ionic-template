@@ -21,6 +21,7 @@ export const useTodo = () => {
       query.api.todo
         .$get({
           query: {
+            order: "desc",
             limit: limit.toString(),
             offset: pageParam.offset.toString(),
           },
