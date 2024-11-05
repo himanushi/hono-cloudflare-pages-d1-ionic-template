@@ -1,10 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
-import { and, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
 import { getMeMiddleware } from "~/server/utils/getMeMiddleware";
-import { todo, todoStatusEnum } from "../db/schema";
+import { todo, todoStatusEnum } from "../../db/schema";
 import type { HonoType } from "../utils/createApp";
 
 export const getTodoApi = createFactory<HonoType>().createHandlers(
@@ -12,6 +12,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
   zValidator(
     "query",
     z.object({
+      order: z.enum(["asc", "desc"]).default("asc").nullable(),
       limit: z.string().transform((v) => Number.parseInt(v, 10)),
       offset: z.string().transform((v) => Number.parseInt(v, 10)),
     }),
@@ -22,7 +23,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
       return c.json({ error: "Unauthorized" }, 401);
     }
 
-    const { limit, offset } = c.req.valid("query");
+    const { limit, offset, order } = c.req.valid("query");
     const results = await drizzle(c.env.DB)
       .select({
         id: todo.id,
@@ -33,7 +34,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
       .where(and(eq(todo.userId, me.id), eq(todo.status, "pending")))
       .limit(limit)
       .offset(offset)
-      .orderBy(desc(todo.id))
+      .orderBy(order === "asc" ? asc(todo.id) : desc(todo.id))
       .all();
 
     return c.json({ data: results });
