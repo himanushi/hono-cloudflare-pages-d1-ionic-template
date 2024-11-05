@@ -35,13 +35,7 @@ export default defineWorkersConfig(async ({ mode }) => {
     };
   }
 
-  const migrationsPath = path.join(
-    __dirname,
-    "src",
-    "server",
-    "db",
-    "migrations",
-  );
+  const migrationsPath = path.join(__dirname, "src", "db", "migrations");
   const migrations = await readD1Migrations(migrationsPath);
 
   return {
