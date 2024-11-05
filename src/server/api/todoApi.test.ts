@@ -11,8 +11,8 @@ const MOCK_ENV = {
 const user1 = { id: 1, name: "Test User" };
 const user2 = { id: 2, name: "Test User2" };
 
-vi.mock("~/server/utils/getMeMiddleware", () => ({
-  getMeMiddleware: (c: any, next: any) => {
+vi.mock("~/server/utils/authMiddleware", () => ({
+  authMiddleware: (c: any, next: any) => {
     c.set("me", user1);
     return next();
   },

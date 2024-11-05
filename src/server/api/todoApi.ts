@@ -3,12 +3,12 @@ import { and, asc, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { getMeMiddleware } from "~/server/utils/getMeMiddleware";
 import { todo, todoStatusEnum } from "../../db/schema";
+import { authMiddleware } from "../utils/authMiddleware";
 import type { HonoType } from "../utils/createApp";
 
 export const getTodoApi = createFactory<HonoType>().createHandlers(
-  getMeMiddleware,
+  authMiddleware,
   zValidator(
     "query",
     z.object({
@@ -42,7 +42,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
 );
 
 export const postTodoApi = createFactory().createHandlers(
-  getMeMiddleware,
+  authMiddleware,
   zValidator(
     "json",
     z.object({
@@ -66,7 +66,7 @@ export const postTodoApi = createFactory().createHandlers(
 );
 
 export const patchTodoApi = createFactory().createHandlers(
-  getMeMiddleware,
+  authMiddleware,
   zValidator(
     "param",
     z.object({

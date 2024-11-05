@@ -11,7 +11,7 @@ export const getMe = async (c: Context<any, any, any>) => {
     return null;
   }
 
-  // 自身の情報を取得したタイミングでセッションを更新する
+  // セッションを更新する
   await setSignedCookie(c, "session", userId, c.env.COOKIE_SECRET, {
     httpOnly: true,
     secure: true,
