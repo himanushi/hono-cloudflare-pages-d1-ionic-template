@@ -9,7 +9,7 @@ import { drizzle } from "drizzle-orm/d1";
 import type { Context } from "hono";
 import { deleteCookie, setSignedCookie } from "hono/cookie";
 import { createFactory } from "hono/factory";
-import { users } from "../db/schema";
+import { users } from "../../db/schema";
 import type { Bindings } from "../utils/createApp";
 
 export const authLoginApi = createFactory().createHandlers(
