@@ -1,9 +1,11 @@
 import { env } from "cloudflare:test";
-import { expect, test, vi } from "vitest";
+import { drizzle } from "drizzle-orm/d1";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { app } from "~/server/routes";
+import { todo, users } from "../db/schema";
 
 const MOCK_ENV = {
-  DB: env,
+  DB: env.DB,
 };
 
 vi.mock("~/server/utils/getMeMiddleware", () => ({
@@ -14,6 +16,15 @@ vi.mock("~/server/utils/getMeMiddleware", () => ({
 }));
 
 test("GET /api/todo should return list of todos", async () => {
+  await drizzle(env.DB)
+    .insert(users)
+    .values({ id: 1, name: "Test User", googleUserId: "testGoogleId" })
+    .execute();
+  await drizzle(env.DB)
+    .insert(todo)
+    .values({ title: "Test Todo 1", userId: 1 })
+    .execute();
+
   const res = await app.request("/api/todo?limit=5&offset=0", {}, MOCK_ENV);
   expect(res.status).toBe(200);
   const jsonResponse = await res.json();
