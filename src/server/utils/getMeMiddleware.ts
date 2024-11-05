@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { getSignedCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
-import { users } from "../db/schema";
+import { users } from "../../db/schema";
 import type { HonoType } from "./createApp";
 
 export const getMeMiddleware = createMiddleware<HonoType>(async (c, next) => {

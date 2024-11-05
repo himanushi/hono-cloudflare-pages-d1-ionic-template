@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import type { Context } from "hono";
 import { getSignedCookie, setSignedCookie } from "hono/cookie";
-import { users } from "../db/schema";
+import { users } from "../../db/schema";
 
 export const getMe = async (c: Context<any, any, any>) => {
   const userId = await getSignedCookie(c, c.env.COOKIE_SECRET, "session");
