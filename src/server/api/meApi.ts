@@ -4,7 +4,7 @@ import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
 import { getMe } from "~/server/utils/getMe";
-import { users } from "../db/schema";
+import { users } from "../../db/schema";
 
 export const getMeApi = createFactory().createHandlers(async (c) => {
   const user = await getMe(c);
