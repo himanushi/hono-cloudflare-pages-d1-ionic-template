@@ -3,15 +3,23 @@ import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { getMe } from "~/server/utils/getMe";
 import { users } from "../../db/schema";
+import { authMiddleware } from "../utils/authMiddleware";
+import type { HonoPropsType } from "../utils/createApp";
 
-export const getMeApi = createFactory().createHandlers(async (c) => {
-  const user = await getMe(c);
-  return c.json(user);
-});
+export const getMeApi = createFactory<HonoPropsType>().createHandlers(
+  authMiddleware,
+  async (c) => {
+    const me = c.get("me");
+    if (!me) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+    return c.json(me);
+  },
+);
 
 export const patchMeApi = createFactory().createHandlers(
+  authMiddleware,
   zValidator(
     "json",
     z.object({
@@ -19,15 +27,17 @@ export const patchMeApi = createFactory().createHandlers(
     }),
   ),
   async (c) => {
-    const user = await getMe(c);
-    if (!user) return c.notFound();
+    const me = c.get("me");
+    if (!me) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
 
     await drizzle(c.env.DB)
       .update(users)
       .set({
         name: c.req.valid("json").name,
       })
-      .where(eq(users.id, Number(user.id)))
+      .where(eq(users.id, Number(me.id)))
       .returning({ updatedUserId: users.id });
 
     return c.text("ok");
