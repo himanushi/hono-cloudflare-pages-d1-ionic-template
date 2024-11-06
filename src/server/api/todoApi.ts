@@ -19,7 +19,6 @@ export const getTodoApi = createFactory<HonoPropsType>().createHandlers(
   ),
   async (c) => {
     const me = c.get("me");
-
     if (!me) {
       return c.json({ error: "Unauthorized" }, 401);
     }
@@ -90,7 +89,7 @@ export const patchTodoApi = createFactory().createHandlers(
     const { status } = c.req.valid("json");
     await drizzle(c.env.DB)
       .update(todo)
-      .set({ status, userId: me.id })
+      .set({ status })
       .where(and(eq(todo.id, id), eq(todo.userId, me.id)))
       .execute();
 
