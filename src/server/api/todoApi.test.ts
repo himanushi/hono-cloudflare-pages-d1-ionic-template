@@ -13,7 +13,10 @@ const user2 = { id: 2, name: "Test User2" };
 
 describe("GET /api/todo", () => {
   beforeEach(async () => {
-    // 認証
+    // モジュールキャッシュをクリアしてからモックを適用
+    vi.resetModules();
+
+    // 認証用のモック
     vi.doMock("~/server/utils/authMiddleware", () => ({
       authMiddleware: (c: any, next: any) => {
         c.set("me", user1);
@@ -35,7 +38,7 @@ describe("GET /api/todo", () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.clearAllMocks(); // モックの状態をクリアして次のテストに影響しないようにする
   });
 
   it("?limit=5&offset=0", async () => {
@@ -66,12 +69,17 @@ describe("GET /api/todo", () => {
 
 describe("Unauthorized GET /api/todo", () => {
   beforeEach(async () => {
+    // モジュールキャッシュをクリアしてからモックを適用
+    vi.resetModules();
+
+    // 未認証用のモック
     vi.doMock("~/server/utils/authMiddleware", () => ({
       authMiddleware: (c: any, next: any) => {
         c.set("me", null);
         return next();
       },
     }));
+
     // テストデータ作成
     await drizzle(env.DB).insert(users).values(user1).execute();
     await drizzle(env.DB).insert(users).values(user2).execute();
@@ -86,7 +94,7 @@ describe("Unauthorized GET /api/todo", () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.clearAllMocks(); // モックの状態をクリア
   });
 
   it("?limit=5&offset=0", async () => {
