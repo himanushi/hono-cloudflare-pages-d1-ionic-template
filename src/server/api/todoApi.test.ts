@@ -12,31 +12,34 @@ const user1 = { id: 1, name: "Test User" };
 const user2 = { id: 2, name: "Test User2" };
 let app: HonoType;
 
-describe("GET /api/todo", () => {
+const setupAuthMiddleware = async (user: any) => {
+  vi.resetModules();
+  vi.doMock("~/server/utils/authMiddleware", () => ({
+    authMiddleware: (c: any, next: any) => {
+      c.set("me", user);
+      return next();
+    },
+  }));
+  app = (await import("~/server/routes")).app;
+};
+
+const setupTestData = async () => {
+  await drizzle(env.DB).insert(users).values(user1).execute();
+  await drizzle(env.DB).insert(users).values(user2).execute();
+  await drizzle(env.DB)
+    .insert(todo)
+    .values([
+      { title: "Test Todo 1", userId: user1.id },
+      { title: "Test Todo 2", userId: user1.id },
+      { title: "Test Todo 3", userId: user2.id },
+    ])
+    .execute();
+};
+
+describe("GET /api/todo - Authenticated", () => {
   beforeEach(async () => {
-    // 認証
-    vi.resetModules();
-    vi.doMock("~/server/utils/authMiddleware", () => ({
-      authMiddleware: (c: any, next: any) => {
-        c.set("me", user1);
-        return next();
-      },
-    }));
-
-    // テストデータ作成
-    await drizzle(env.DB).insert(users).values(user1).execute();
-    await drizzle(env.DB).insert(users).values(user2).execute();
-    await drizzle(env.DB)
-      .insert(todo)
-      .values([
-        { title: "Test Todo 1", userId: user1.id },
-        { title: "Test Todo 2", userId: user1.id },
-        { title: "Test Todo 3", userId: user2.id },
-      ])
-      .execute();
-
-    // Hono インスタンス作成
-    app = (await import("~/server/routes")).app;
+    await setupAuthMiddleware(user1);
+    await setupTestData();
   });
 
   it("?limit=5&offset=0", async () => {
@@ -65,31 +68,10 @@ describe("GET /api/todo", () => {
   });
 });
 
-describe("GET /api/todo Unauthorized", () => {
+describe("GET /api/todo - Unauthorized", () => {
   beforeEach(async () => {
-    // 未認証
-    vi.resetModules();
-    vi.doMock("~/server/utils/authMiddleware", () => ({
-      authMiddleware: (c: any, next: any) => {
-        c.set("me", null);
-        return next();
-      },
-    }));
-
-    // テストデータ作成
-    await drizzle(env.DB).insert(users).values(user1).execute();
-    await drizzle(env.DB).insert(users).values(user2).execute();
-    await drizzle(env.DB)
-      .insert(todo)
-      .values([
-        { title: "Test Todo 1", userId: user1.id },
-        { title: "Test Todo 2", userId: user1.id },
-        { title: "Test Todo 3", userId: user2.id },
-      ])
-      .execute();
-
-    // Hono インスタンス作成
-    app = (await import("~/server/routes")).app;
+    await setupAuthMiddleware(null);
+    await setupTestData();
   });
 
   it("?limit=5&offset=0", async () => {
