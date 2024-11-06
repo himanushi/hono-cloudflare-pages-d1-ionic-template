@@ -5,9 +5,9 @@ import { createFactory } from "hono/factory";
 import { z } from "zod";
 import { todo, todoStatusEnum } from "../../db/schema";
 import { authMiddleware } from "../utils/authMiddleware";
-import type { HonoType } from "../utils/createApp";
+import type { HonoPropsType } from "../utils/createApp";
 
-export const getTodoApi = createFactory<HonoType>().createHandlers(
+export const getTodoApi = createFactory<HonoPropsType>().createHandlers(
   authMiddleware,
   zValidator(
     "query",
@@ -19,6 +19,7 @@ export const getTodoApi = createFactory<HonoType>().createHandlers(
   ),
   async (c) => {
     const me = c.get("me");
+
     if (!me) {
       return c.json({ error: "Unauthorized" }, 401);
     }
