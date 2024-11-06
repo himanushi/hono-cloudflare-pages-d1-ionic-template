@@ -1,8 +1,8 @@
 import { env } from "cloudflare:test";
 import { drizzle } from "drizzle-orm/d1";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { todo, users } from "~/db/schema";
-import { app } from "~/server/routes";
+import type { HonoType } from "../utils/createApp";
 
 const MOCK_ENV = {
   DB: env.DB,
@@ -10,13 +10,12 @@ const MOCK_ENV = {
 
 const user1 = { id: 1, name: "Test User" };
 const user2 = { id: 2, name: "Test User2" };
+let app: HonoType;
 
 describe("GET /api/todo", () => {
   beforeEach(async () => {
-    // モジュールキャッシュをクリアしてからモックを適用
+    // 認証
     vi.resetModules();
-
-    // 認証用のモック
     vi.doMock("~/server/utils/authMiddleware", () => ({
       authMiddleware: (c: any, next: any) => {
         c.set("me", user1);
@@ -35,10 +34,9 @@ describe("GET /api/todo", () => {
         { title: "Test Todo 3", userId: user2.id },
       ])
       .execute();
-  });
 
-  afterEach(() => {
-    vi.clearAllMocks(); // モックの状態をクリアして次のテストに影響しないようにする
+    // Hono インスタンス作成
+    app = (await import("~/server/routes")).app;
   });
 
   it("?limit=5&offset=0", async () => {
@@ -67,12 +65,10 @@ describe("GET /api/todo", () => {
   });
 });
 
-describe("Unauthorized GET /api/todo", () => {
+describe("GET /api/todo Unauthorized", () => {
   beforeEach(async () => {
-    // モジュールキャッシュをクリアしてからモックを適用
+    // 未認証
     vi.resetModules();
-
-    // 未認証用のモック
     vi.doMock("~/server/utils/authMiddleware", () => ({
       authMiddleware: (c: any, next: any) => {
         c.set("me", null);
@@ -91,10 +87,9 @@ describe("Unauthorized GET /api/todo", () => {
         { title: "Test Todo 3", userId: user2.id },
       ])
       .execute();
-  });
 
-  afterEach(() => {
-    vi.clearAllMocks(); // モックの状態をクリア
+    // Hono インスタンス作成
+    app = (await import("~/server/routes")).app;
   });
 
   it("?limit=5&offset=0", async () => {
