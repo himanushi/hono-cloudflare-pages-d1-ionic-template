@@ -12,7 +12,7 @@ export const getMeApi = createFactory<HonoPropsType>().createHandlers(
   async (c) => {
     const me = c.get("me");
     if (!me) {
-      return c.json({ error: "Unauthorized" }, 401);
+      return c.json(null);
     }
     return c.json(me);
   },
