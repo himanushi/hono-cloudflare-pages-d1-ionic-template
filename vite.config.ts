@@ -34,23 +34,42 @@ export default defineWorkersConfig(async ({ mode }) => {
       ],
     };
   }
+  if (mode === "server") {
+    return {
+      ssr: {
+        external: [
+          "@capacitor/preferences",
+          "react",
+          "react-dom",
+          "react-router-dom",
+          "@ionic/react",
+          "@ionic/react-router",
+          "@tanstack/react-query",
+          "@tanstack/react-query-persist-client",
+        ],
+      },
+      plugins: [
+        pages(),
+        devServer({
+          adapter,
+          entry: "src/index.tsx",
+        }),
+        tsconfigPaths(),
+      ],
+      poolOptions: {
+        workers: {
+          miniflare: {},
+          wrangler: { configPath: "./wrangler.toml" },
+        },
+      },
+    };
+  }
 
+  // test
   const migrationsPath = path.join(__dirname, "src", "db", "migrations");
   const migrations = await readD1Migrations(migrationsPath);
 
   return {
-    ssr: {
-      external: [
-        "@capacitor/preferences",
-        "react",
-        "react-dom",
-        "react-router-dom",
-        "@ionic/react",
-        "@ionic/react-router",
-        "@tanstack/react-query",
-        "@tanstack/react-query-persist-client",
-      ],
-    },
     test: {
       setupFiles: ["./test/apply-migrations.ts"],
       poolOptions: {
