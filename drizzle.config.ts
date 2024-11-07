@@ -2,16 +2,16 @@ import type { Config } from "drizzle-kit";
 
 export default (process.env.LOCAL_DB_PATH
   ? {
-      schema: "./src/server/db/schema.ts",
-      out: "./src/server/db/migrations",
+      schema: "./src/db/schema.ts",
+      out: "./src/db/migrations",
       dialect: "sqlite",
       dbCredentials: {
         url: process.env.LOCAL_DB_PATH as string,
       },
     }
   : {
-      schema: "./src/server/db/schema.ts",
-      out: "./src/server/db/migrations",
+      schema: "./src/db/schema.ts",
+      out: "./src/db/migrations",
       dialect: "sqlite",
       driver: "d1-http",
       dbCredentials: {
