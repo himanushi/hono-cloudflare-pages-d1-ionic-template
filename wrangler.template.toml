@@ -16,5 +16,5 @@ OIDC_SCOPES = "${OIDC_SCOPES}"
 [[d1_databases]]
 binding = "DB"
 database_name = "${APP_NAME}"
-migrations_dir = "src/server/db/migrations"
+migrations_dir = "src/db/migrations"
 database_id = "${CLOUDFLARE_DATABASE_ID}"
