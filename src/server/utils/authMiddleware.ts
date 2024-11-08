@@ -1,4 +1,3 @@
-import { getSignedCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import type { HonoPropsType } from "./createApp";
 import { getMe } from "./getMe";
